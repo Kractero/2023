@@ -36,6 +36,7 @@ Aerilia,4500,Abolished Reality,1698918027,S3 L Morover
 Fauzjhia,4444.67,Noahs Second Country,1681069644,S3 L Morover
 9006,3999.75,Midlands,1696901348,S1 E 9003
 
+
 ## Individual Cards
 
 The Most Moved Cards
@@ -210,6 +211,19 @@ National Park Service,1540
 Varanius,1479
 Osheiga,1399
 
+Most buys of legs for more than 0
+
+Koem Kab,2275
+Noahs Second Country,1232
+Mikeswill,1004
+Seanat,815
+Portsville,695
+Thorn1000,452
+New Makasta,451
+Osheiga,326
+The Shaymen,293
+Vulxo,291
+
 Most Active Gifters of Legendaries
 
 Seanat,436
@@ -252,6 +266,10 @@ Portsville,17
 ## Season Breakdown
 
 Per season
+
+1,428970
+2,1044063
+3,1640109
 
 ### Season 1
 
@@ -810,3 +828,50 @@ September,188742,244038
 October,185706,261475
 November,196140,217492
 December,203366,333728
+
+Traders Per Month
+
+Most Trades
+
+Jan,Mikeswill,2328
+Feb,Noahs Second Country,2293
+March,Noahs Second Country,1965
+April,Noahs Second Country,2053
+May,War Dogs IV,1142
+June,War Dogs IV,7316
+July,War Dogs IV,4851
+August,War Dogs IV,4219
+September,Fauzjhia,4399
+October,War Dogs IV,3904
+November,War Dogs IV,3738
+December,War Dogs IV,4043
+
+Most Money:
+
+Jan,Noahs Second Country,19634
+Feb,Giraffeton,12164
+March,Noahs Second Country,6517
+April,Noahs Second Country,21983
+May,Seanat,11531
+June,Koem Kab,870
+July,Koem Kab,38629
+August,Koem Kab,19210
+September,Ianaterp,10000
+October,Noahs Second Country,35290
+November,Noahs Second Country,11490
+December,Panagouge,16912
+
+Unique Cards Traded Per Month
+
+Jan,100018
+Feb,80047
+March,87552
+April,66876
+May,82923
+June,74682
+July,73707
+August,72355
+September,68646
+October,63972
+November,68783
+Decemeber,69496
