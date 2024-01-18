@@ -104,7 +104,7 @@ AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 
 ## More Into 2023 Numbers
 
-### Season 3 Rarities
+### 2023 Rarities
 
 | | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
 |---|----------|----------|----------| --------- |
@@ -116,6 +116,10 @@ AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 | **Legendary** | 80,864 | 17,687 | 64 | 1,132,470 |
 
 
+<details>
+  <summary>Details: 2023 Rarities</summary>
+  
+  ```sql
 SELECT category, COUNT(*)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
@@ -135,8 +139,10 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 AND PRICE > 0
 GROUP BY category;
+```
+</details>
 
-### Season 3 By Season
+### 2023 By Season
 
 | | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
 |---|----------|----------|----------| --------- |
@@ -144,25 +150,31 @@ GROUP BY category;
 | **S2** | 330,768 | 146,955 | 7.10 | 1,043,833 |
 | **S3** | 2,021,419 | 932,849 | 1.76 | 1,639,682 |
 
-SELECT season, COUNT(*)
-FROM trades
-WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+<details>
+  <summary>Details: 2023 Seasons </summary>
+  
+  ```sql
+  SELECT season, COUNT(*)
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  GROUP BY season;
+
+  SELECT season, AVG(price)
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-GROUP BY season;
+  AND PRICE > 0
+  GROUP BY season;
 
-SELECT season, AVG(price)
-FROM trades
-WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
-AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-AND PRICE > 0
-GROUP BY season;
-
-SELECT season, SUM(price)
-FROM trades
-WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
-AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-AND PRICE > 0
-GROUP BY season;
+  SELECT season, SUM(price)
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+  GROUP BY season;
+  ```
+</details>
 
 ### Season 3 By Both Rarity and Season
 
@@ -214,40 +226,54 @@ GROUP BY season;
 | **S2** | 5,766 | 2,570 | 64.5 | 165,704 |
 | **S3** | 73,065 | 14,562 | 58.4 | 850,331 |
 
-SELECT category, season, SUM(price)
-FROM trades
-WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
-  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-  AND PRICE > 0
-GROUP BY category, season;
+<details>
+  <summary>Details: 2023 Rarity and Seasons</summary>
+
+  ```sql
+    SELECT category, season, SUM(price)
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+      AND PRICE > 0
+    GROUP BY category, season;
+  ```
+
+</details>
 
 
 ### Trades
 | Rank | Seller                    | Buyer                      | Price   | Card                                      | Date       |
 |------|---------------------------|----------------------------|---------|-------------------------------------------|------------|
-| 1    | ianaterp                   | national_park_service      | 10000.0 | S3 Legendary Annihilators of Chan Island  | 2023-09-04 |
+| 1    | Ianaterp                   | National Park Service      | 10000.0 | S3 Legendary Annihilators of Chan Island  | 2023-09-04 |
 | 2    | new_zander                 | noahs_second_country       | 10000.0 | S3 Legendary Annihilators of Chan Island  | 2023-08-15 |
-| 3    | feu_de_glace               | valkyrie_reborn             | 9999.99 | S3 Legendary Annihilators of Chan Island  | 2023-10-01 |
+| 3    | Feu de Glace               | valkyrie_reborn             | 9999.99 | S3 Legendary Annihilators of Chan Island  | 2023-10-01 |
 | 4    | 9003                       | 9006                       | 6000.0  | S1 Epic 9003                              | 2023-12-20 |
-| 5    | lilanina                   | osheiga                    | 5000.5  | S3 Legendary Annihilators of Chan Island  | 2023-08-30 |
+| 5    |Lilanina                   | osheiga                    | 5000.5  | S3 Legendary Annihilators of Chan Island  | 2023-08-30 |
 | 6    | 9003                       | 9006                       | 5000.0  | S2 Common HMS Warmaiden                   | 2023-02-22 |
-| 7    | united_worlds_of_waifuland | aerilia                    | 5000.0  | S3 Legendary Annihilators of Chan Island  | 2023-11-02 |
-| 8    | abolished_reality          | aerilia                    | 4500.0  | S3 Legendary Morover                       | 2023-11-02 |
-| 9    | noahs_second_country       | fauzjhia                   | 4444.67 | S3 Legendary Morover                       | 2023-04-09 |
-| 10   | midlands                   | 9006                       | 3999.75 | S1 Epic 9003                              | 2023-10-10 |
+| 7    | United Worlds of Waifuland | Aerilia                    | 5000.0  | S3 Legendary Annihilators of Chan Island  | 2023-11-02 |
+| 8    | Abolished Reality          | Aerilia                    | 4500.0  | S3 Legendary Morover                       | 2023-11-02 |
+| 9    | Noahs Second Country       | Fauzjhia                   | 4444.67 | S3 Legendary Morover                       | 2023-04-09 |
+| 10   | Midlands                   | 9006                       | 3999.75 | S1 Epic 9003                              | 2023-10-10 |
 
-SELECT
-    buyer,
-    seller,
-    price,
-    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
-    season || ' ' || category || ' ' || card_name AS consolidated_info
-FROM trades
-WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+<details>
+  <summary>2023 Top 10 Trades</summary>
+
+  ```sql
+  SELECT
+      buyer,
+      seller,
+      price,
+      strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+      season || ' ' || category || ' ' || card_name AS consolidated_info
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
   AND price > 0
-ORDER BY price DESC
-LIMIT 10;
+  ORDER BY price DESC
+  LIMIT 10;
+  ```
+
+</details>
 
 ### Individual Cards
 
@@ -266,6 +292,10 @@ LIMIT 10;
 | 9 | S3 Common Chitose Ikeda | 4,095 |
 | 10 | S3 Rare Valoptia | 4,040 |
 
+<details>
+    <summary>2023 Most Moved Cards</summary>
+
+```sql
 SELECT
     season,
     category,
@@ -277,6 +307,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY season, category, card_id, card_name
 ORDER BY card_count DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Money Moved Per Card
 
@@ -293,18 +326,25 @@ LIMIT 10;
 | 9    | S3 Legendary The Stalker          | 21,509.52          | 471             |
 | 10   | S2 Common Sacara                  | 20,563.57          | 156             |
 
+<details>
+    <summary>2023 Most Money Moved Per Card</summary>
+
+```sql
 SELECT
     season,
     category,
     card_name,
     SUM(price) AS card_count,
-	COUNT(*) AS transfers
+        COUNT(*) AS transfers
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 GROUP BY season, category, card_id, card_name
 ORDER BY card_count DESC
 LIMIT 10;
+```
+
+</details>
 
 ## Buyers and Sellers
 
@@ -323,6 +363,10 @@ LIMIT 10;
 | 9    | 9006                 | 78616.81           |
 | 10   | Vulxo                | 67605.57           |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved</summary>
+
+```sql
 SELECT
     Trader,
     SUM(Money_Moved) AS Total_Money_Moved
@@ -348,6 +392,9 @@ FROM (
 GROUP BY Trader
 ORDER BY Total_Money_Moved DESC
 LIMIT 10;
+```
+
+</details>
 
 > Money Moved (as buyer)
 
@@ -364,6 +411,10 @@ LIMIT 10;
 | 9    | Fauzjhia                 | 34,779.57             |
 | 10   | Portsville               | 33,509.21             |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved</summary>
+
+```sql
 SELECT
     buyer,
     SUM(price)
@@ -373,6 +424,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY buyer
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Money Moved (as seller)
 
@@ -389,6 +443,10 @@ LIMIT 10;
 | 9    | 9006                 | 43668.90              |
 | 10   | Thorn1000             | 39490.27              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved As Seller</summary>
+
+```sql
 SELECT
     seller,
     SUM(price)
@@ -398,6 +456,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY seller
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Active Traders
 
@@ -414,6 +475,10 @@ LIMIT 10;
 | 9    | new_makasta             | 31,816      |
 | 10   | apexiala                | 27,283      |
 
+<details>
+    <summary>2023 Active Traders in Trade Count</summary>
+
+```sql
 SELECT nation, COUNT(*) AS trade_count
 FROM (
   SELECT buyer AS nation
@@ -429,6 +494,9 @@ FROM (
 GROUP BY nation
 ORDER BY trade_count DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Active Traders (in non-zero transactions)
 
@@ -445,27 +513,34 @@ LIMIT 10;
 | 9    | Giraffeton                                 | 14,794      |
 | 10   | Krupp Industries                           | 13,873      |
 
+<details>
+    <summary>2023 Active Traders in Trade Count (>0)</summary>
+
+```sql
 SELECT trader, COUNT(*) AS trade_count
 FROM (
   SELECT buyer AS trader
   FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 0
+        AND PRICE > 0
   UNION ALL
   SELECT seller AS trader
   FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 0
+        AND PRICE > 0
 )
 GROUP BY trader
 ORDER BY trade_count DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Cards Bought
 
-| Rank | Trader                                  | Total Involvement |
+| Rank | Trader                                  | Cards Bought |
 |------|-----------------------------------------|-------------------|
 | 1    | War Dogs IV                             | 265,591           |
 | 2    | The Colonial Buccaruu                   | 95,280            |
@@ -478,6 +553,10 @@ LIMIT 10;
 | 9    | Noah's Second Country                   | 22,626            |
 | 10   | Il Sonno della Ragione Genera Mostri    | 18,821            |
 
+<details>
+    <summary>2023 Active Traders in Cards Bought</summary>
+
+```sql
 SELECT buyer, COUNT(*) as trades_bought
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
@@ -485,6 +564,9 @@ FROM trades
 GROUP BY buyer
 ORDER BY trades_bought DESC
 LIMIT 10;
+```
+
+</details>
 
 
 > Most Cards Bought for more than 0
@@ -503,14 +585,21 @@ LIMIT 10;
 | 10   | Rain Delay                              | 9,682             |
 
 
+<details>
+    <summary>2023 Active Traders in Cards Bought (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*) as trades_bought
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 0
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY trades_bought DESC
 LIMIT 10;
+```
+
+</details>
 
 
 > Most Cards Sold
@@ -528,7 +617,20 @@ LIMIT 10;
 | 9    | New Makasta                           | 8,381             |
 | 10   | Thorn1000                             | 7,195             |
 
+<details>
+    <summary>2023 Active Traders in Cards Sold</summary>
 
+```sql
+SELECT seller, COUNT(*) as trades_sold
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY seller
+ORDER BY trades_sold DESC
+LIMIT 10;
+```
+
+</details>
 
 > Most Cards Sold for more than 0
 
@@ -545,14 +647,21 @@ LIMIT 10;
 | 9    | Seanat                                  | 5,692       |
 | 10   | Fauzjhia                                | 5,653       |
 
+<details>
+    <summary>2023 Active Traders in Cards Sold (>0)</summary>
+
+```sql
 SELECT seller, COUNT(*) as trades_sold
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 0
+        AND PRICE > 0
 GROUP BY seller
 ORDER BY trades_sold DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Cards Gifted (sold for 0)
 
@@ -569,14 +678,20 @@ LIMIT 10;
 | 9    | Aerilia                               | 2,351       |
 | 10   | Noah's Second Country                 | 2,160       |
 
+<details>
+    <summary>2023 Active Traders in Cards Sold</summary>
+
+```sql
 SELECT seller, COUNT(*) as trades_sold
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE = 0
 GROUP BY seller
 ORDER BY trades_sold DESC
 LIMIT 10;
+```
+
+</details>
 
 
 > Most buys over 250
@@ -594,14 +709,21 @@ LIMIT 10;
 | 9    | Pumpty Dumpty     | 19              |
 | 10   | Portsville        | 17              |
 
+<details>
+    <summary>2023 Most Purchases over 250</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 250
+        AND PRICE > 250
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most sells over 250
 
@@ -618,14 +740,21 @@ LIMIT 10;
 | 9    | Fauzjhia        | 11              |
 | 10   | Dr Hooves       | 10              |
 
+<details>
+    <summary>2023 Most Sales over 250</summary>
+
+```sql
 SELECT seller, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND PRICE > 250
+        AND PRICE > 250
 GROUP BY seller
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Buyers By Season
 
@@ -645,14 +774,21 @@ LIMIT 10;
 | 9    | War Dogs VII     | 2,605       |
 | 10   | Talakmachen      | 2,276       |
 
+<details>
+    <summary>2023 Most Purchases of Season 1 Cards</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 1
+        AND season = 1
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Buyer of Season 1 for more than 0:
 
@@ -670,15 +806,22 @@ LIMIT 10;
 | 10   | Mikeshope                  | 624         |
 
 
+<details>
+    <summary>2023 Most Purchases of Season 1 Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 1
-	AND PRICE > 0
+        AND season = 1
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Season 2
 
@@ -697,14 +840,21 @@ LIMIT 10;
 | 9    | Annondor                            | 2,853       |
 | 10   | Rain Delay                          | 2,831       |
 
+<details>
+    <summary>2023 Most Purchases of Season 2 Cards</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 2
+        AND season = 2
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Buyer of Season 2 for more than 0:
 
@@ -721,15 +871,22 @@ LIMIT 10;
 | 9    | Apexiala                             | 910         |
 | 10   | Seanat                              | 890         |
 
+<details>
+    <summary>2023 Most Purchases of Season 2 Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 2
-	AND PRICE > 0
+        AND season = 2
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Season 3
 
@@ -748,14 +905,21 @@ LIMIT 10;
 | 9    | Racoda                     | 16,226      |
 | 10   | Fauzjhia                    | 15,568      |
 
+<details>
+    <summary>2023 Most Purchases of Season 3 Cards</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 3
+        AND season = 3
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Buyer of Season 3 for more than 0:
 
@@ -772,15 +936,22 @@ LIMIT 10;
 | 9    | Sentient Puppets                     | 10,417      |
 | 10   | New Makasta                          | 9,020       |
 
+<details>
+    <summary>2023 Most Purchases of Season 3 Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND season = 3
-	AND PRICE > 0
+        AND season = 3
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Buyers By Rarity (for more than 0)
 
@@ -799,15 +970,22 @@ LIMIT 10;
 | 9    | Concrete Slab                       | 4,900       |
 | 10   | Krupp Industries                    | 4,729       |
 
+<details>
+    <summary>2023 Most Purchases of Common Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'c'
-	AND PRICE > 0
+        AND category = 'c'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top buyers of Uncommon Cards
 
@@ -824,15 +1002,22 @@ LIMIT 10;
 | 9    | Apexiala                   | 2,485        |
 | 10   | Giovanniland              | 2,372        |
 
+<details>
+    <summary>2023 Most Purchases of Uncommon Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'u'
-	AND PRICE > 0
+        AND category = 'u'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top buyers of Rare cards
 
@@ -849,15 +1034,22 @@ LIMIT 10;
 | 9    | Slaggstone Bruntt      | 886          |
 | 10   | Krupp Industries       | 846          |
 
+<details>
+    <summary>2023 Most Purchases of Rare Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'r'
-	AND PRICE > 0
+        AND category = 'r'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top buyers of ultra-rares
 
@@ -874,15 +1066,22 @@ LIMIT 10;
 | 9    | Giraffeton         | 684          |
 | 10   | Slaggstone Bruntt  | 662          |
 
+<details>
+    <summary>2023 Most Purchases of Ultra-Rare Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'ur'
-	AND PRICE > 0
+        AND category = 'ur'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top Buyers of Epics
 
@@ -899,15 +1098,22 @@ LIMIT 10;
 | 9    | Shion Uzuki                | 1,582        |
 | 10   | Auranzjinilhe               | 1,350       |
 
+<details>
+    <summary>2023 Most Purchases of Epic Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'e'
-	AND PRICE > 0
+        AND category = 'e'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most buys of legendaries
 
@@ -924,14 +1130,21 @@ LIMIT 10;
 | 9    | Varanius                              | 1,479       |
 | 10   | Osheiga                               | 1,399       |
 
+<details>
+    <summary>2023 Most Purchases of Legendary Cards</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'l'
-GROUP BY seller
+        AND category = 'l'
+GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most buys of legs for more than 0
 
@@ -948,28 +1161,22 @@ LIMIT 10;
 | 9    | The Shaymen                           | 293         |
 | 10   | Vulxo                                 | 291         |
 
+<details>
+    <summary>2023 Most Purchases of Legendary Cards (>0)</summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'l'
-	AND PRICE > 0
+        AND category = 'l'
+        AND PRICE > 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
 
-> Most Active Gifters of Legendaries
-
-SELECT seller, COUNT(*)
-FROM trades
-  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
-    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'l'
-	AND PRICE = 0
-GROUP BY seller
-ORDER BY COUNT(*) DESC
-LIMIT 10;
-
+</details>
 
 > Highest number of legendaries gifted (sold for 0):
 
@@ -986,6 +1193,23 @@ LIMIT 10;
 | 9    | The Northern Light            | 251         |
 | 10   | Greatest Chernobyl            | 223         |
 
+<details>
+    <summary>2023 Highest number of legendaries gifted (price=0) </summary>
+
+```sql
+SELECT seller, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+        AND category = 'l'
+        AND PRICE = 0
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+```
+
+</details>
+
 > Highest number of legendaries received for 0:
 
 | Rank | Trader                      | Trade Count |
@@ -1001,15 +1225,22 @@ LIMIT 10;
 | 9    | Osheiga                     | 1,073       |
 | 10   | Valoptia                    | 917         |
 
+<details>
+    <summary>2023 Highest number of legendaries received (price=0) </summary>
+
+```sql
 SELECT buyer, COUNT(*)
 FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND category = 'l'
-	AND PRICE = 0
+        AND category = 'l'
+        AND PRICE = 0
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ## Some Rarity Breakdowns
 
@@ -1031,6 +1262,10 @@ Most expensive common trades of the year
 | 10   | Purple Fairy             | Dorti Saingsmeistan           | 696.0   | S2 Common Zazquatch                   | 2023-07-11 |
 
 
+<details>
+    <summary>2023 Most Expensive Common Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1044,6 +1279,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'c'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Uncommon
 
@@ -1060,6 +1298,10 @@ LIMIT 10;
 | 9    | Vara 4   | Vara 8  | 1800.01 | S2 Uncommon Varanius   | 2023-12-09 |
 | 10   | Vara 1   | Vara 10 | 1800.0  | S2 Uncommon Varanius   | 2023-12-09 |
 
+<details>
+    <summary>2023 Most Expensive Uncommon Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1073,6 +1315,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'u'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Rare
 
@@ -1089,6 +1334,10 @@ LIMIT 10;
 | 9    | Bigboy170         | Bigboy245          | 314.0  | S3 Upper Tuchoim             | 2023-09-16 |
 | 10   | Bigboy184         | Bigboy170          | 302.0  | S3 Upper Tuchoim             | 2023-09-15 |
 
+<details>
+    <summary>2023 Most Expensive Rare Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1102,6 +1351,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'r'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Ultra-Rare
 
@@ -1118,6 +1370,10 @@ LIMIT 10;
 | 9    | Varanius                | Brexas7             | 200.03 | S1 Brexas2               | 2023-10-28 |
 | 10   | TheLandOfFunFunFun      | The Funian Conduit  | 160.2  | S3 TheLandOfFunFunFun     | 2023-03-28 |
 
+<details>
+    <summary>2023 Most Expensive Ultra-Rare Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1131,6 +1387,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'ur'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 
 ### Epic
@@ -1148,6 +1407,10 @@ LIMIT 10;
 | 9    | 900102           | 900101          | 1000.0 | S1 9003 | 2023-08-20 |
 | 10   | 9003            | 9006            | 1000.0 | S1 9003 | 2023-05-23 |
 
+<details>
+    <summary>2023 Most Expensive Epic Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1161,6 +1424,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'e'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Legendary
 
@@ -1179,6 +1445,10 @@ LIMIT 10;
 | 9    | 9006                      | Siwale                    | 2000.0  | S3 Morover                      | 2023-12-26 |
 | 10   | Aerilia                   | Aragesh                   | 1600.0  | S1 Soops                        | 2023-08-20 |
 
+<details>
+    <summary>2023 Most Expensive Legendary Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1192,6 +1462,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND CATEGORY = 'l'
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most expensive S1 legendary trades of the year
 
@@ -1208,6 +1481,10 @@ LIMIT 10;
 | 9    | Elegarth               | War Dogs IV            | 750.0   | S1 Rubyna   | 2023-11-10 |
 | 10   | Racoda                 | New Kowloon Bay        | 738.89  | S1 NERVUN   | 2023-08-25 |
 
+<details>
+    <summary>2023 Most Expensive S1 Legendary Trades</summary>
+
+```sql
 SELECT
     seller,
     buyer,
@@ -1222,6 +1499,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND SEASON = 1
 ORDER BY price DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Traded Legendary (more than 0):
 
@@ -1238,10 +1518,14 @@ LIMIT 10;
 | 9    | S3 Corfad               | 83     |
 | 10   | S3 Lamoni               | 83     |
 
+<details>
+    <summary>2023 Most Traded Legendary (>0)</summary>
+
+```sql
 SELECT
     season,
     card_name,
-	COUNT(*)
+        COUNT(*)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
@@ -1250,6 +1534,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY season, card_name
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Money Moved Per Leg:
 
@@ -1266,10 +1553,14 @@ LIMIT 10;
 | 2    | S2 S_diego                    | 15372.87    |
 | 3    | S3 Morover                    | 14054.69    |
 
+<details>
+    <summary>2023 Most Bank Moved by Legendary</summary>
+
+```sql
 SELECT
     season,
     card_name,
-	SUM(price)
+        SUM(price)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
@@ -1278,6 +1569,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY season, card_name
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 ## Chronos Breakdown
 
@@ -1298,6 +1592,10 @@ LIMIT 10;
 | 9    | Giraffeton               | 34535.02              |
 | 10   | Thorn1000                | 32512.42              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Bank Moved (Jan to July)</summary>
+
+```sql
 SELECT
     Trader,
     SUM(Money_Moved) AS Total_Money_Moved
@@ -1323,6 +1621,9 @@ FROM (
 GROUP BY Trader
 ORDER BY Total_Money_Moved DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top Money Moved (buyer)
 
@@ -1339,6 +1640,10 @@ LIMIT 10;
 | 9    | Varanius              | 16332.42              |
 | 10   | Thorn1000             | 15578.46              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Bank Moved As Buyer (Jan to July)</summary>
+
+```sql
 SELECT
     buyer,
     SUM(price)
@@ -1348,6 +1653,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY buyer
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top Money Moved (seller)
 
@@ -1364,6 +1672,10 @@ LIMIT 10;
 | 9    | Portsville            | 19556.87              |
 | 10   | New_Makasta           | 17329.53              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Bank Moved As Seller (Jan to July)</summary>
+
+```sql
 SELECT
     seller,
     SUM(price)
@@ -1373,6 +1685,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY seller
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Buys
 
@@ -1389,6 +1704,10 @@ LIMIT 10;
 | 9    | Noahs Second Country    | 13347        |
 | 10   | Slaggstone Bruntt       | 12829        |
 
+<details>
+    <summary>2023 Active Traders in Terms of Purchases (Jan to July)</summary>
+
+```sql
 SELECT
     buyer,
     COUNT(*)
@@ -1398,6 +1717,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most buys for more than 0:
 
@@ -1414,6 +1736,10 @@ LIMIT 10;
 | 9    | S3 Rares Collector                  | 6947         |
 | 10   | Giraffeton                          | 6532         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Purchases (Jan to July, >0)</summary>
+
+```sql
 SELECT
     buyer,
     COUNT(*)
@@ -1424,6 +1750,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most sells:
 
@@ -1440,6 +1769,10 @@ LIMIT 10;
 | 9    | Witchcraft and Sorcery              | 3685         |
 | 10   | Il Sonno Della Ragione Genera Mostri | 3152        |
 
+<details>
+    <summary>2023 Active Traders in Terms of Sales (Jan to July)</summary>
+
+```sql
 SELECT
     seller,
     COUNT(*)
@@ -1449,6 +1782,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY seller
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most sells for more than 0:
 
@@ -1465,6 +1801,10 @@ LIMIT 10;
 | 9    | Koem Kab                            | 3079         |
 | 10   | Krupp Industries                    | 2762         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Sales (Jan to July, >0)</summary>
+
+```sql
 SELECT
     seller,
     COUNT(*)
@@ -1475,6 +1815,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY seller
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ### Last Half of the Year
 
@@ -1493,6 +1836,10 @@ LIMIT 10;
 | 9    | Vulxo                    | 52174.08              |
 | 10   | Panagouge                | 41919.98              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved (July to Jan)</summary>
+
+```sql
 SELECT
     Trader,
     SUM(Money_Moved) AS Total_Money_Moved
@@ -1518,6 +1865,9 @@ FROM (
 GROUP BY Trader
 ORDER BY Total_Money_Moved DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top Money Movers (buyer):
 
@@ -1534,6 +1884,10 @@ LIMIT 10;
 | 9    | Giovanniland             | 23139.56              |
 | 10   | Aerilia                  | 22435.47              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved in Purchases (July to Jan)</summary>
+
+```sql
 SELECT
     buyer,
     SUM(price)
@@ -1543,6 +1897,9 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY buyer
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Top Money Movers (seller):
 
@@ -1559,6 +1916,10 @@ LIMIT 10;
 | 9    | Panagouge                 | 25716.52              |
 | 10   | Seanat                   | 25013.33              |
 
+<details>
+    <summary>2023 Active Traders in Terms of Capital Moved in Sales (July to Jan)</summary>
+
+```sql
 SELECT
     seller,
     SUM(price)
@@ -1568,6 +1929,9 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY seller
 ORDER BY SUM(price) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Buys:
 
@@ -1584,6 +1948,10 @@ LIMIT 10;
 | 9    | Apexiala                 | 9605         |
 | 10   | Noah's Second Country    | 9279         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Purchase Count (July to Jan)</summary>
+
+```sql
 SELECT
     buyer,
     COUNT(*)
@@ -1593,6 +1961,9 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most buys for more than 0:
 
@@ -1609,6 +1980,10 @@ LIMIT 10;
 | 9    | Sentient Puppets                     | 5137         |
 | 10   | Rain Delay                           | 5004         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Purchase Count (July to Jan, >0)</summary>
+
+```sql
 SELECT
     buyer,
     COUNT(*)
@@ -1619,6 +1994,9 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY buyer
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most Sell
 
@@ -1635,6 +2013,10 @@ LIMIT 10;
 | 9    | The Colonial Buccaruu               | 4095         |
 | 10   | New Makasta                         | 4000         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Sales Count (July to Jan)</summary>
+
+```sql
 SELECT
     seller,
     COUNT(*)
@@ -1644,6 +2026,9 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY seller
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 > Most sell for more than 0
 
@@ -1660,6 +2045,10 @@ LIMIT 10;
 | 9    | Fauzjhia                            | 2943         |
 | 10   | Krupp Industries                    | 2770         |
 
+<details>
+    <summary>2023 Active Traders in Terms of Sales Count (July to Jan, >0)</summary>
+
+```sql
 SELECT
     seller,
     COUNT(*)
@@ -1670,12 +2059,19 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY seller
 ORDER BY COUNT(*) DESC
 LIMIT 10;
+```
+
+</details>
 
 ## Time and Day Stuff
 
 The day in which the most money was transferred on the market was December 9th at 7 AM UTC, which totaled 13994.06.
 
-SELECT 
+<details>
+    <summary>2023 Day in which the most capital was moved</summary>
+
+```sql
+SELECT
   strftime('%j %H', timestamp, 'unixepoch') AS hour_of_year,
   SUM(price) AS total_money_moved
 FROM trades
@@ -1684,6 +2080,9 @@ WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
 GROUP BY hour_of_year
 ORDER BY total_money_moved DESC
 LIMIT 1;
+```
+
+</details>
 
 > The top 5 trades
 
@@ -1696,17 +2095,30 @@ LIMIT 1;
 | 5    | Vara 10      | Vara 1     | 1800.0  | S2 Uncommon Varanius    |
 
 
-SELECT seller, buyer, price,     
-	strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+<details>
+    <summary>2023 Top 5 Trades on Said Day</summary>
+
+```sql
+SELECT seller, buyer, price,
+        strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
     season || ' ' || category || ' ' || card_name AS consolidated_info
 FROM trades
 WHERE strftime('%j %H', timestamp, 'unixepoch') = '343 07'
 ORDER BY price DESC
 LIMIT 5;
+```
+
+</details>
 
 The day in which the most trades occured on the market was Jan 26th at 10 pm utc, a total of 2060.
 
-SELECT 
+The most active buyer at the time was The North Pacific S3, at 1011. Conversely, the most active seller was Amphibian Manifesto, at 49.
+
+<details>
+    <summary>2023 Day in which most trades took place</summary>
+
+```sql
+SELECT
   strftime('%j %H', timestamp, 'unixepoch') AS hour_of_year,
   COUNT(*) AS total_trades
 FROM trades
@@ -1715,8 +2127,6 @@ WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
 GROUP BY hour_of_year
 ORDER BY total_trades DESC
 LIMIT 1;
-
-The most active buyer at the time was The North Pacific S3, at 1011. Conversely, the most active seller was Amphibian Manifesto, at 49.
 
 SELECT buyer, COUNT(buyer) AS buyer_count
 FROM trades
@@ -1731,6 +2141,9 @@ WHERE strftime('%j %H', timestamp, 'unixepoch') = '026 22'
 GROUP BY seller
 ORDER BY seller_count DESC
 LIMIT 1;
+```
+
+</details>
 
 ### Hour of the Day
 Hour of the Day, Total Trades, Money Moved
@@ -1762,15 +2175,22 @@ Hour of the Day, Total Trades, Money Moved
 | 22   | 123905       | 157420.83   |
 | 23   | 116696       | 134427.53   |
 
-SELECT 
+<details>
+    <summary>2023 Trades on each hour of the day</summary>
+
+```sql
+SELECT
     strftime('%H', timestamp, 'unixepoch') AS hour_of_day,
     COUNT(*) AS total_trades,
-	SUM(PRICE)
+        SUM(PRICE)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 GROUP BY hour_of_day
 ORDER BY hour_of_day;
+```
+
+</details>
 
 ### Day of the Week
 Day of the Week,Total Trades, Money Moved
@@ -1786,15 +2206,22 @@ Day of the Week,Total Trades, Money Moved
 | Saturday  | 370280       | 444006.50             |
 
 
-SELECT 
+<details>
+    <summary>2023 Trades on each day of the week</summary>
+
+```sql
+SELECT
     strftime('%w', timestamp, 'unixepoch') AS day_of_week,
     COUNT(*) AS total_trades,
-	SUM(PRICE)
+        SUM(PRICE)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 GROUP BY day_of_week
 ORDER BY day_of_week;
+```
+
+</details>
 
 SELECT 
     strftime('%w', timestamp, 'unixepoch') AS day_of_week,
@@ -1825,15 +2252,22 @@ ORDER BY day_of_week, hour_of_day;
 | 2023-12  | 203193       | 332953.81            |
 
 
-SELECT 
+<details>
+    <summary>2023 Trades on each month of the year</summary>
+
+```sql
+SELECT
     strftime('%Y-%m', timestamp, 'unixepoch') AS month,
     COUNT(*) AS total_trades,
-	SUM(price)
+        SUM(price)
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 GROUP BY month
 ORDER BY month;
+```
+
+</details>
 
 ### Traders Per Month
 
@@ -1854,8 +2288,12 @@ ORDER BY month;
 | 2023-11    | New Zander             | 6890         |
 | 2023-12    | War Dogs IV            | 3003         |
 
+<details>
+    <summary>2023 Monthly Most Active Traders in terms of trade count</summary>
+
+```sql
 WITH MonthlyStats AS (
-  SELECT 
+  SELECT
     strftime('%Y-%m', timestamp, 'unixepoch') AS month,
     buyer AS trader,
     COUNT(*) AS total_trades
@@ -1867,7 +2305,7 @@ WITH MonthlyStats AS (
 
   UNION ALL
 
-  SELECT 
+  SELECT
     strftime('%Y-%m', timestamp, 'unixepoch') AS month,
     seller AS trader,
     COUNT(*) AS total_trades
@@ -1878,12 +2316,12 @@ WITH MonthlyStats AS (
   GROUP BY month, trader
 )
 
-SELECT 
+SELECT
   month,
   trader,
   total_trades
 FROM (
-  SELECT 
+  SELECT
     month,
     trader,
     total_trades,
@@ -1892,6 +2330,9 @@ FROM (
 ) RankedStats
 WHERE trades_rank = 1
 ORDER BY month;
+```
+
+</details>
 
 
 > Most Money:
@@ -1911,6 +2352,52 @@ ORDER BY month;
 | 2023-11    | Aerilia               | 12785.81    |
 | 2023-12    | Varanius              | 17699.61    |
 
+<details>
+    <summary>2023 Monthly Most Active Traders in terms of capital moved</summary>
+
+```sql
+WITH MonthlyStats AS (
+  SELECT
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month,
+    buyer AS trader,
+    SUM(price) AS capital_moved
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+  GROUP BY month, trader
+
+  UNION ALL
+
+  SELECT
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month,
+    seller AS trader,
+    SUM(price) AS capital_moved
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+  GROUP BY month, trader
+)
+
+SELECT
+  month,
+  trader,
+  capital_moved
+FROM (
+  SELECT
+    month,
+    trader,
+    capital_moved,
+    ROW_NUMBER() OVER (PARTITION BY month ORDER BY capital_moved DESC) AS money_rank
+  FROM MonthlyStats
+) RankedStats
+WHERE money_rank = 1
+ORDER BY month;
+```
+
+</details>
+
 
 > Unique Cards Traded Per Month
 
@@ -1929,13 +2416,20 @@ ORDER BY month;
 | 2023-11 | 68737                |
 | 2023-12 | 69452                |
 
-SELECT strftime('%Y-%m', timestamp, 'unixepoch') AS month_year, 
+<details>
+    <summary>2023 Monthly Unique Cards Traded</summary>
+
+```sql
+SELECT strftime('%Y-%m', timestamp, 'unixepoch') AS month_year,
        COUNT(DISTINCT card_id) AS unique_cards_traded
 FROM trades
 WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
   AND timestamp < strftime('%s', '2024-01-01 00:00:00')
 GROUP BY month_year
 ORDER BY month_year;
+```
+
+</details>
 
 > Top 3 Legendaries money move per month
 
@@ -2035,17 +2529,21 @@ ORDER BY month_year;
 | S3 The Stalker          | 8993.53           |
 | S3 Morover              | 2955.02           |
 
+<details>
+    <summary>2023 Top 3 Legendaries Each Month</summary>
+
+```sql
 WITH MonthlyTopCards AS (
-  SELECT 
+  SELECT
     strftime('%Y-%m', timestamp, 'unixepoch') AS month_year,
-    card_name, 
+    card_name,
     season,
     SUM(price) AS total_money_moved,
     ROW_NUMBER() OVER (PARTITION BY strftime('%Y-%m', timestamp, 'unixepoch') ORDER BY SUM(price) DESC) AS rn
   FROM trades
   WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
     AND timestamp < strftime('%s', '2024-01-01 00:00:00')
-	AND CATEGORY = 'l'
+        AND CATEGORY = 'l'
   GROUP BY month_year, card_name, season
 )
 
@@ -2053,3 +2551,6 @@ SELECT month_year, card_name, season, total_money_moved
 FROM MonthlyTopCards
 WHERE rn <= 3
 ORDER BY month_year, total_money_moved DESC;
+```
+
+</details>
