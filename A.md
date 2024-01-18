@@ -1,877 +1,2055 @@
 # Year in Review
 
-The amount of trades that occurred in 2023 totaled 2,493,703, which moved 3,113,141.6 bank in total. If you factor out gifts, 1,139,816 trades occured, meaning the average trade was worth 2.73 bank.
+In an effort to analyze market activity and make use of some of the data I've gathered, this report will delve into the activity of the card market in 2023, as well as make some comparisons to that of 2022.
 
-2023 saw 72,055 unique buyers and 116,024 unique sellers. In total, 126,665 unique nations paricipated in cards in 2023.
+All of these statistics will be looked at with gifting (trades where the price = 0) and without gifting, as well have their relevant sql query provided.
 
-647 trades occured with a value between 250-499.99, and 200 occured with value over 500.
+## A Brief Comparison with 2023 and 2022:
 
-Yearly Rarity Total
+### 2023
 
-Common,1238094,555828
-Uncommon,517709,244922
-Rare,223835,98821
-Ultra-Rare,193090,92769
-Epic,240089,129786
-Legendary,80886,17690
+The card market in 2023 was very active, numbering at `2,493,179` trades, which saw `3,112,218.81` bank moved between trades. 
 
-Average Price Per Category excluding Zero
+When gifts are excluded, the market recorded `1,139,606` trades, or 45.7% of all trades. The average trade value within these non-gifts were `2.73` bank.
 
-Common,1.99
-Uncommon,1.52
-Rare,1.33
-Ultra-Rare,1.41
-Epic,1.83
-Legendary,64
+The market also saw a total of 72,061 unique nations purchase a card, 116,020 unique nations sell a card, and a total of 126,660 nations participate in the market as a whole.
 
-Most Expensive Trades of the Year
+In 2023, there were over `947` trades that occured with a value of over 250, with `738` between 250 and 499 and `209` at over 500.
 
-National Park Service,10000,Lanterp,1693812600,S3 L Annihilators of Chan Island
-Noahs Second Country,10000,New Zander,1692128067,S3 L Annihilators of Chan Island
-Valkyrie Reborn,9999.99,Feu De Glace,1696198849,S3 L Annihilators of Chan Island
-9006,6000,9003,1703083422,S1 E 9003
-Osheiga,5000.5,Lilanina,1693369845,S3 L Annihilators of Chan Island
-Aerilia,5000,United Worlds of Waifuland,1698909750,S3 L Annihilators of Chan Island
-Aerilia,4500,Abolished Reality,1698918027,S3 L Morover
-Fauzjhia,4444.67,Noahs Second Country,1681069644,S3 L Morover
-9006,3999.75,Midlands,1696901348,S1 E 9003
+- Total Trades: `2,493,179`
+- Total Trades Excluding Gifts: `1,139,606` (45.7%)
+- Average Bank Per Non Gift Trade: `2.73`
+- Total Bank Moved: `3,112,218.81`
+- Unique Buyers: `72,061`
+- Unique Sellers: `116,020`
+- Unique Participants: `126,660`
+
+### 2022:
+
+Comparing these figures with the preceding fiscal year, 2022 showcased a card market with `1,521,153` trades, facilitating a total financial movement of `20,953,130.28` bank. 
+
+When excluding gifts, the dataset for 2022 revealed `915,644` trades (or 60.2% of all trades), with an average trade value of `22.88` bank.
+
+Unique buyers in 2022 totaled 62,578, while there were 98,377 sellers, and as a whole 110,398 unique nations participated in cards.
+
+In 2022, there were over `7588` trades that occured with a value of over 250, with `1412` between 250 and 499 and `6177` at over 500.
+
+- Total Trades: `1,521,153`
+- Total Trades Excluding Gifts: `915,644` (60.2%)
+- Average Bank Per Non Gift Trade: `22.88`
+- Total Bank Moved: `20,953,130.28`
+- Unique Buyers: `62,578`
+- Unique Sellers: `98,377`
+- Unique Participants: `110,398`
+
+### Useless Insights
+
+1. It is clear that more trades happened in 2023, but there seems to have been much more player to player or player to puppet interaction in 2023 than in 2022.
+
+2. The changes to market value applied on November of 2022 has had a clear effect on the market. You can see an enormous decline in average trade value from 2022 to 2023, as well as an almost 85.1% decrease in the amount of bank moved via the market. A glance at the amount of trades at a value over 250 tells the same story.
+
+3. Slightly more players participated in cards in 2023, but this could be due to the expansion of puppet armies as much as it could be an increase in unique players.
+
+<details>
+  <summary>Details: Total Trades</summary>
+  
+  ```sql
+  SELECT COUNT(*) FROM TRADES
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00');
+
+  SELECT COUNT(*) FROM TRADES
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0;
+
+SELECT SUM(price) FROM TRADES
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+
+SELECT COUNT(DISTINCT buyer)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00');
+
+SELECT COUNT(DISTINCT seller)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00');
+
+SELECT COUNT(DISTINCT trader) AS unique_traders
+FROM (
+    SELECT DISTINCT buyer AS trader, timestamp FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+    
+    UNION
+    
+    SELECT DISTINCT seller AS trader, timestamp FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+);
+
+SELECT COUNT(*) FROM trades
+WHERE price >= 250 AND price <= 499
+AND timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+
+SELECT COUNT(*) FROM trades
+WHERE price >= 500
+AND timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  ```
+</details>
+
+## More Into 2023 Numbers
+
+### Season 3 Rarities
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **Common** | 1,237,881 | 555,768 | 1.99 | 1,132,470 |
+| **Uncommon** | 517,576 | 244,852 | 1.52 | 373,379 |
+| **Rare** | 223,768 | 98,782 | 1.33 | 131,786 |
+| **Ultra-Rare** | 193,052 | 92,757 | 1.41 | 130,665 |
+| **Epic** | 240,038 | 129,760 | 1.83 | 237,588 |
+| **Legendary** | 80,864 | 17,687 | 64 | 1,132,470 |
 
 
-## Individual Cards
+SELECT category, COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY category;
 
-The Most Moved Cards
+SELECT category, AVG(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+AND PRICE > 0
+GROUP BY category;
 
-S2 Common El Alto Parana,16128
-S2 -ii,12360
-S2 Pittsburgh Penguins,12284
-S2 Common Southern Defender 26,6781
-S2 Common Northern Lands Islannibady,4821
-S1 Common Rahmaostan,4651
-S3 Uncommon Yuantoplae lesplay,4298
-S3 Uncommon Smeagollum,4176
-S3 Common Chitose Ikeda,4103
-S3 Rare Valoptia,4064
+SELECT category, SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+AND PRICE > 0
+GROUP BY category;
 
-Most Moved Cards at price 0
+### Season 3 By Season
 
-S2 Common El Alto Parana,8053
-S2 -ii,6216
-S2 Pittsburgh Penguins,6161
-S2 Common Southern Defender 26,3413
-S2 Common Northern Lands Islannibady,2448
-S1 Common Rahmaostan,2335
-S3 Uncommon Yuantoplae lesplay,2242
-S3 Common Chitose Ikeda,2230
-S3 Uncommon Smeagollum,2175
-S3 Rare Valoptia,2108
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 140,992 | 59,802 | 7.17 | 428,704 |
+| **S2** | 330,768 | 146,955 | 7.10 | 1,043,833 |
+| **S3** | 2,021,419 | 932,849 | 1.76 | 1,639,682 |
 
-Cards bought the most for more than 0
+SELECT season, COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY season;
 
-S2 Common El Alto Parana,8075
-S2 Common -ii,6144
-S2 Common Pittsburgh Penguins,6123
-S2 Common Southern Defender 26,3368
-S2 Common Northern Lands Islannibady,2373
-S1 Common Rahmaostan,2316
-S3 Uncommon Yuantoplae lesplay,2056
-S3 Uncommon Smeagollum,2001
-S3 Rare Valoptia,1956
-S3 Common Chitose Ikeda,1873
+SELECT season, AVG(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+AND PRICE > 0
+GROUP BY season;
 
-Most Money Moved Per Card:
+SELECT season, SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+AND PRICE > 0
+GROUP BY season;
 
-Card,Money,Transfers
+### Season 3 By Both Rarity and Season
 
-S2 Common Pittsburgh Penguins,59213,12284
-S2 Common -ii,56215,12360
-S2 Uncommon Varanius,40608,130
-S3 Legendary Annihilators of Chan Island,40000,28
-S2 Common El Alto Parana,32290,16128
-S1 Epic 9003,27392,45
-S3 Uncommon Panagouge,24287,119
-S3 Rare Upper Tuchoim,24105,531
-S3 Legendary The Stalker,21510,156
-S2 Legendary Sacara,20564,346
+>Commons
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 83,879 | 35,028 | 5.65 | 197,778 |
+| **S2** | 211,872 | 97,189 | 6.06 | 589,196 |
+| **S3** | 942,220 | 423,551 | 0.76 | 320,469 |
+
+>Uncommons 
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 32,279 | 13,645 | 3.55 | 48,413 |
+| **S2** | 69,089 | 25,833 | 8.74 | 225,802 |
+| **S3** | 416,208 | 205,374 | 0.48 | 98,756 |
+
+>Rare 
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 9,473 | 4,027 | 1.49| 5,981 |
+| **S2** | 18,747 | 8,298 | 2.35 | 19,501 |
+| **S3** | 195,548 | 86,457 | 1.22 | 105,791 |
+
+>Ultra-Rare 
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 6,132 | 2,713 | 2.85 | 7,738 |
+| **S2** | 11,885 | 6,171 | 3.49 | 21,509 |
+| **S3** | 175,035 | 83,873 | 1.21 | 101,394 |
+
+>Epic
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 7,286 | 3,834 | 13.68 | 52,460 |
+| **S2** | 13,409 | 6,894 | 3.21 | 22,122 |
+| **S3** | 219,343 | 119,032 | 1.37 | 162,941 |
+
+>Legendary 
+
+| | Trades Involved In | Non-Gift Trades | Average Price (!0) | Bank Moved |
+|---|----------|----------|----------| --------- |
+| **S1** | 2,033 | 555 | 210 | 116,334 |
+| **S2** | 5,766 | 2,570 | 64.5 | 165,704 |
+| **S3** | 73,065 | 14,562 | 58.4 | 850,331 |
+
+SELECT category, season, SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+GROUP BY category, season;
+
+
+### Trades
+| Rank | Seller                    | Buyer                      | Price   | Card                                      | Date       |
+|------|---------------------------|----------------------------|---------|-------------------------------------------|------------|
+| 1    | ianaterp                   | national_park_service      | 10000.0 | S3 Legendary Annihilators of Chan Island  | 2023-09-04 |
+| 2    | new_zander                 | noahs_second_country       | 10000.0 | S3 Legendary Annihilators of Chan Island  | 2023-08-15 |
+| 3    | feu_de_glace               | valkyrie_reborn             | 9999.99 | S3 Legendary Annihilators of Chan Island  | 2023-10-01 |
+| 4    | 9003                       | 9006                       | 6000.0  | S1 Epic 9003                              | 2023-12-20 |
+| 5    | lilanina                   | osheiga                    | 5000.5  | S3 Legendary Annihilators of Chan Island  | 2023-08-30 |
+| 6    | 9003                       | 9006                       | 5000.0  | S2 Common HMS Warmaiden                   | 2023-02-22 |
+| 7    | united_worlds_of_waifuland | aerilia                    | 5000.0  | S3 Legendary Annihilators of Chan Island  | 2023-11-02 |
+| 8    | abolished_reality          | aerilia                    | 4500.0  | S3 Legendary Morover                       | 2023-11-02 |
+| 9    | noahs_second_country       | fauzjhia                   | 4444.67 | S3 Legendary Morover                       | 2023-04-09 |
+| 10   | midlands                   | 9006                       | 3999.75 | S1 Epic 9003                              | 2023-10-10 |
+
+SELECT
+    buyer,
+    seller,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+ORDER BY price DESC
+LIMIT 10;
+
+### Individual Cards
+
+> Most Moved Cards (considering whether they were bought or sold for more than 0 made no real difference in the rankings)
+
+| Rank | Card | Trade Count |
+| - | ---- | ----------- |
+| 1 | S2 Common El Alto Parana | 16,125
+| 2 |  S2 -ii |12,366 |
+| 3 | S2 Pittsburgh Penguins | 12,197 |
+| 4 | S2 Common Southern Defender 26 | 6,779 |
+| 5 | S2 Common Northern Lands Islannibady | 4,821 |
+| 6 | S1 Common Rahmaostan | 4,654 |
+| 7 | S3 Uncommon Yuantoplae lesplay | 4,294 |
+| 8 | S3 Uncommon Smeagollum | 4,153 |
+| 9 | S3 Common Chitose Ikeda | 4,095 |
+| 10 | S3 Rare Valoptia | 4,040 |
+
+SELECT
+    season,
+    category,
+    card_name,
+    COUNT(*) AS card_count
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY season, category, card_id, card_name
+ORDER BY card_count DESC
+LIMIT 10;
+
+> Most Money Moved Per Card
+
+| Rank | Card                              | Money Moved        | Transfer Count |
+|------|-----------------------------------|--------------------|-----------------|
+| 1    | S2 Common Pittsburgh Penguins    | 59,193.26          | 12,197          |
+| 2    | S2 Common -ii                    | 56,284.65          | 12,366          |
+| 3    | S2 Uncommon Varanius             | 40,608.31          | 130             |
+| 4    | S3 Legendary Annihilators of Chan Island | 40,000.49  | 28              |
+| 5    | S2 Common El Alto Parana          | 32,309.72          | 16,125          |
+| 6    | S1 Epic 9003                      | 27,392.05          | 45              |
+| 7    | S2 Uncommon Panagouge             | 24,286.70          | 119             |
+| 8    | S3 Rare Upper Tuchoim             | 23,804.57          | 529             |
+| 9    | S3 Legendary The Stalker          | 21,509.52          | 471             |
+| 10   | S2 Common Sacara                  | 20,563.57          | 156             |
+
+SELECT
+    season,
+    category,
+    card_name,
+    SUM(price) AS card_count,
+	COUNT(*) AS transfers
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY season, category, card_id, card_name
+ORDER BY card_count DESC
+LIMIT 10;
 
 ## Buyers and Sellers
 
-Top Money Movers:
+> Most Money Moved
 
-Noahs Second Country,90030
-Koem Kab,84697
-Mikeswill,76428
-Osheiga,62618
-Seanat,54838
-Varanius,48413
-Giovanniland,38410
-9006,36446
-Fauzjhia,34784
-Portsville,33509
+| Rank | Trader               | Total Money Moved  |
+|------|----------------------|--------------------|
+| 1    | Noahs Second Country | 223207.0           |
+| 2    | Mikeswill            | 187134.69          |
+| 3    | Koem Kab             | 175546.73          |
+| 4    | Osheiga              | 131383.33          |
+| 5    | Seanat               | 112887.81          |
+| 6    | Varanius             | 103207.39          |
+| 7    | Giovanniland         | 82404.1            |
+| 8    | Fauzjhia             | 78895.19           |
+| 9    | 9006                 | 78616.81           |
+| 10   | Vulxo                | 67605.57           |
 
-Top General Traders:
+SELECT
+    Trader,
+    SUM(Money_Moved) AS Total_Money_Moved
+FROM (
+    SELECT
+        buyer AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+    GROUP BY buyer
 
-War Dogs IV,314528
-The Colonial Buccaruu,102410
-Dune Cat,50429
-Mikeswill,41459
-Noahs Second Country,37604
-Giovanniland,36654
-Koem Kab,34234
-Fauzjhia,31942
-Apexiala,27285
+    UNION ALL
 
-Top General Traders for more than 0:
+    SELECT
+        seller AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+    GROUP BY seller
+) AS CombinedResults
+GROUP BY Trader
+ORDER BY Total_Money_Moved DESC
+LIMIT 10;
 
-War Dogs IV,46417
-Dune Cat,39038
-Giovanniland,27068
-Il Sonno Della Ragione Genera Mostri,25443
-Apexiala,20611
-Frisbeeteria,19336
-New Makasta,17401
-Noahs Second Country,14805
-Giraffeton,14794
-Krupp Industries,13875
+> Money Moved (as buyer)
 
-Most Buys in the Year
+| Rank | Trader                   | Money Moved           |
+|------|--------------------------|-----------------------|
+| 1    | Noahs Second Country     | 90,030.04             |
+| 2    | Koem Kab                 | 84,596.00             |
+| 3    | Mikeswill                | 76,428.20             |
+| 4    | Osheiga                  | 62,617.93             |
+| 5    | Seanat                   | 54,837.61             |
+| 6    | Varanius                 | 48,412.59             |
+| 7    | Giovanniland             | 38,408.73             |
+| 8    | 9006                     | 36,446.13             |
+| 9    | Fauzjhia                 | 34,779.57             |
+| 10   | Portsville               | 33,509.21             |
 
-War Dogs IV,265564
-The Colonial Buccaruu,95307
-Dune Cat,48965
-Giovanniland,34082
-Mikeswill,28806
-Koem Kab,25359
-Apexiala,23975
-New Makasta,23438
-Noahs Second Country,22632
-Il Sonno Della Ragione Genera Mostri,18825
+SELECT
+    buyer,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY buyer
+ORDER BY SUM(price) DESC
+LIMIT 10;
 
-Most Buys in the Year for more than 0
+> Money Moved (as seller)
 
-Dune Cat,37590
-Giovanniland,25295
-War Dogs IV,22030
-Apexiala,19057
-Il Sonno Della Ragione Genera Mostri,18787
-Frisbeeteria,15547
-Giraffeton,13693
-The North Pacific S3,12077
-Sentient Puppets,10420
-Rain Delay,9684
+| Rank | Trader               | Money_Moved           |
+|------|----------------------|-----------------------|
+| 1    | Noahs Second_Country | 141036.96             |
+| 2    | Mikeswill             | 120877.49             |
+| 3    | Koem Kab              | 91041.49              |
+| 4    | Osheiga               | 69225.65              |
+| 5    | Seanat               | 58050.20              |
+| 6    | Varanius              | 57205.29              |
+| 7    | Fauzjhia              | 46342.89              |
+| 8    | Giovanniland          | 44005.59              |
+| 9    | 9006                 | 43668.90              |
+| 10   | Thorn1000             | 39490.27              |
 
-Most Active Seller
+SELECT
+    seller,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY seller
+ORDER BY SUM(price) DESC
+LIMIT 10;
 
-War Dogs IV,48874
-Noahs Second Country,14972
-Fauzjhia,14466
-Mikeswill,12653
-A Share of the JPMorgan Chase,11622
-Seanat,9962
-Koem Kab,8875
-Axixic,8660
-New Makasta,83876
-Thorn1000,7191
+> Most Active Traders
 
-Most Active Seller for More than 0 Bank
+| Rank | Trader                  | Trade Count |
+|------|-------------------------|-------------|
+| 1    | war_dogs_iv             | 314,455     |
+| 2    | the_colonial_buccaruu   | 102,381     |
+| 3    | dune_cat                | 50,428      |
+| 4    | mikeswill               | 41,448      |
+| 5    | noahs_second_country    | 37,603      |
+| 6    | giovanniland            | 36,643      |
+| 7    | koem_kab                | 34,226      |
+| 8    | fauzjhia                | 31,934      |
+| 9    | new_makasta             | 31,816      |
+| 10   | apexiala                | 27,283      |
 
-War Dogs IV,24387
-Noahs Second Country,12812
-Koem Kab,8869
-Axixic,8359
-New Makasta,8276
-Mikeswill,7478
-Il Sonno Della Ragione Genera Mostri,6656
-Thorn1000,5844
-Seanat,5692
-Fauzjhia,5653
+SELECT nation, COUNT(*) AS trade_count
+FROM (
+  SELECT buyer AS nation
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  UNION ALL
+  SELECT seller AS nation
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+)
+GROUP BY nation
+ORDER BY trade_count DESC
+LIMIT 10;
 
-Most Active Gifters
+> Most Active Traders (in non-zero transactions)
 
-War Dogs IV,24487
-Fauzjhia,8813
-A Share of the JPMorgan Chase,6603
-Mikeswill,5175
-Seanat,4270
-Demeter,3987
-Yodle,3625
-The Colonial Buccaruu,2567
-Aerilia,2351
-Noahs Second Country,2160
+| Rank | Trader                                     | Trade Count |
+|------|--------------------------------------------|-------------|
+| 1    | War Dogs IV                                | 46,409      |
+| 2    | Dune Cat                                   | 39,037      |
+| 3    | Giovanniland                               | 27,060      |
+| 4    | Il Sonno della Ragione Genera Mostri       | 25,438      |
+| 5    | Apexiala                                    | 20,609      |
+| 6    | Frisbeeteria                               | 19,334      |
+| 7    | New Makasta                                | 17,405      |
+| 8    | Noah's Second Country                      | 14,810      |
+| 9    | Giraffeton                                 | 14,794      |
+| 10   | Krupp Industries                           | 13,873      |
 
-Most buys of legendaries:
+SELECT trader, COUNT(*) AS trade_count
+FROM (
+  SELECT buyer AS trader
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 0
+  UNION ALL
+  SELECT seller AS trader
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 0
+)
+GROUP BY trader
+ORDER BY trade_count DESC
+LIMIT 10;
 
-Koem Kab,8610
-Noahs Second Country,7790
-Mikeswill,4510
-Seanat,2150
-Thorn1000,1833
-New Makasta,1803
-Portsville,1567
-National Park Service,1540
-Varanius,1479
-Osheiga,1399
+> Most Cards Bought
 
-Most buys of legs for more than 0
+| Rank | Trader                                  | Total Involvement |
+|------|-----------------------------------------|-------------------|
+| 1    | War Dogs IV                             | 265,591           |
+| 2    | The Colonial Buccaruu                   | 95,280            |
+| 3    | Dune Cat                                | 48,965            |
+| 4    | Giovanniland                            | 34,072            |
+| 5    | Mikeswill                               | 28,802            |
+| 6    | Koem Kab                                | 25,351            |
+| 7    | Apexiala                                | 23,973            |
+| 8    | New Makasta                             | 23,435            |
+| 9    | Noah's Second Country                   | 22,626            |
+| 10   | Il Sonno della Ragione Genera Mostri    | 18,821            |
 
-Koem Kab,2275
-Noahs Second Country,1232
-Mikeswill,1004
-Seanat,815
-Portsville,695
-Thorn1000,452
-New Makasta,451
-Osheiga,326
-The Shaymen,293
-Vulxo,291
+SELECT buyer, COUNT(*) as trades_bought
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY buyer
+ORDER BY trades_bought DESC
+LIMIT 10;
 
-Most Active Gifters of Legendaries
 
-Seanat,436
-Valoptia,415
-Lackadaisia,384
-The Chinese Soviet,374
-9006,314
-Refuge Isle,274
-ROM,270
-Thorn1000,259
-The Northern Light,251
-Greatest Chernobyl,223
+> Most Cards Bought for more than 0
 
-Highest number of legendaries received for 0:
+| Rank | Trader                                  | Total Money Moved |
+|------|-----------------------------------------|-------------------|
+| 1    | Dune Cat                                | 37,590            |
+| 2    | Giovanniland                            | 25,288            |
+| 3    | War Dogs IV                             | 22,028            |
+| 4    | Apexiala                                | 19,055            |
+| 5    | Il Sonno della Ragione Genera Mostri    | 18,783            |
+| 6    | Frisbeeteria                            | 15,545            |
+| 7    | Giraffeton                              | 13,693            |
+| 8    | The North Pacific S3                    | 12,077            |
+| 9    | Sentient Puppets                        | 10,420            |
+| 10   | Rain Delay                              | 9,682             |
 
-Noahs Second Country,6558
-Koem Kab,6335
-Mikeswill,3506
-National Park Service,1472
-Thorn1000,1381
-New Makasta,1352
-Seanat,1335
-Varanius,1278
-Osheiga,1073
-Valoptia,917
 
-Most Buys over 250
+SELECT buyer, COUNT(*) as trades_bought
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY trades_bought DESC
+LIMIT 10;
 
-Osheiga,69
-Giovanniland,69
-Fauzjhia,36
-Upper Tuchoim,32
-Vulxo,24
-Varanius,23
-Seanat,23
-Valoptia,21
-Pumpty Dumpty,19
-Portsville,17
 
-## Season Breakdown
+> Most Cards Sold
 
-Per season
+| Rank | Trader                                | Total Money Moved |
+|------|---------------------------------------|-------------------|
+| 1    | War Dogs IV                           | 48,864            |
+| 2    | Noah's Second Country                 | 14,977            |
+| 3    | Fauzjhia                              | 14,462            |
+| 4    | Mikeswill                             | 12,646            |
+| 5    | A Share of the JPMorgan Chase         | 11,617            |
+| 6    | Seanat                                | 9,962             |
+| 7    | Koem Kab                              | 8,875             |
+| 8    | Axixic                                | 8,659             |
+| 9    | New Makasta                           | 8,381             |
+| 10   | Thorn1000                             | 7,195             |
 
-1,428970
-2,1044063
-3,1640109
 
-### Season 1
 
-Season 1 saw 141,022 total trades, 59,816 of which were actual for bank trades. This amounts to - [ ] % of trades for value.
+> Most Cards Sold for more than 0
 
-Of season 1, commons made up 83,805, of which 35,035 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 1, uncommons made up 32,290, of which 13,651 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 1, rares made up 9475, of which 4027 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 1, ultra-rares made up 6132, of which 2714 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 1, epics made up 7287, of which 3834 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 1, legendaries made up 2033, of which 555 were sold for value. This amounts to - [ ] % of trades for value.
+| Rank | Trader                                  | Trade Count |
+|------|-----------------------------------------|-------------|
+| 1    | War Dogs IV                             | 24,381      |
+| 2    | Noah's Second Country                   | 12,817      |
+| 3    | Koem Kab                                | 8,869       |
+| 4    | Axixic                                  | 8,358       |
+| 5    | New Makasta                             | 8,281       |
+| 6    | Mikeswill                               | 7,471       |
+| 7    | Il Sonno della Ragione Genera Mostri    | 6,655       |
+| 8    | Thorn1000                               | 5,848       |
+| 9    | Seanat                                  | 5,692       |
+| 10   | Fauzjhia                                | 5,653       |
 
-S1 Rarity Averages
+SELECT seller, COUNT(*) as trades_sold
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 0
+GROUP BY seller
+ORDER BY trades_sold DESC
+LIMIT 10;
 
-Common,5.65
-Uncommon,3.55
-Rare,1.49
-Ultra-Rare,2.85
-Epic,13.68
-Legendary,210
+> Most Cards Gifted (sold for 0)
 
-Buyers of Season 1:
+| Rank | Trader                                | Trade Count |
+|------|---------------------------------------|-------------|
+| 1    | War Dogs IV                           | 24,483      |
+| 2    | Fauzjhia                              | 8,809       |
+| 3    | A Share of the JPMorgan Chase         | 6,600       |
+| 4    | Mikeswill                             | 5,175       |
+| 5    | Seanat                                | 4,270       |
+| 6    | Demeter                               | 3,986       |
+| 7    | Yodle                                 | 3,624       |
+| 8    | The Colonial Buccaruu                 | 2,566       |
+| 9    | Aerilia                               | 2,351       |
+| 10   | Noah's Second Country                 | 2,160       |
 
-Cartagriem 011,4291
-Kwaj,3793
-Mikeswill,3584
-Koem Kab,3008
-Rain Delay,2949
-War Dogs IV,2848
-Ballotonia,2657
-Kractero,2624
-War Dogs VII,2607
-Talakmachen,2278
+SELECT seller, COUNT(*) as trades_sold
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE = 0
+GROUP BY seller
+ORDER BY trades_sold DESC
+LIMIT 10;
 
-Buyuer of Season 1 more than 0:
 
-Cartagriem 011,2321
-War Dogs IV,2144
-Rain Delay,1637
-Mikeswill,1515
-Caffeinated,1221
-Dr Hooves,856
-Yodle,767
-Apexiala,722
-Ferengi Alliance Union,682
-MikesHope,624
+> Most buys over 250
+
+| Rank | Trader            | Cards Bought |
+|------|-------------------|-----------------|
+| 1    | Osheiga           | 69              |
+| 2    | Giovanniland      | 69              |
+| 3    | Fauzjhia          | 36              |
+| 4    | Upper Tuchoim     | 31              |
+| 5    | Vulxo             | 24              |
+| 6    | Varanius          | 23              |
+| 7    | Seanat            | 23              |
+| 8    | Valoptia          | 21              |
+| 9    | Pumpty Dumpty     | 19              |
+| 10   | Portsville        | 17              |
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 250
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most sells over 250
+
+| Rank | Trader          | Transfer Count |
+|------|-----------------|-----------------|
+| 1    | Giovanniland    | 47              |
+| 2    | Varanius        | 25              |
+| 3    | Osheiga         | 19              |
+| 4    | Racoda          | 17              |
+| 5    | Panagouge       | 17              |
+| 6    | Vulxo           | 16              |
+| 7    | 9006            | 16              |
+| 8    | Benevolent 1    | 15              |
+| 9    | Fauzjhia        | 11              |
+| 10   | Dr Hooves       | 10              |
+
+SELECT seller, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND PRICE > 250
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+### Buyers By Season
+
+
+> Buyers of Season 1:
+
+| Rank | Trader           | Cards Bought |
+|------|------------------|-------------|
+| 1    | Cartagriem 011   | 4,291       |
+| 2    | Kwaj             | 3,793       |
+| 3    | Mikeswill         | 3,584       |
+| 4    | Koem Kab         | 3,008       |
+| 5    | Rain Delay       | 2,948       |
+| 6    | War Dogs IV      | 2,848       |
+| 7    | Ballotonia       | 2,657       |
+| 8    | Kractero          | 2,622       |
+| 9    | War Dogs VII     | 2,605       |
+| 10   | Talakmachen      | 2,276       |
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 1
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Buyer of Season 1 for more than 0:
+
+| Rank | Trader                     | Cards Bought |
+|------|----------------------------|-------------|
+| 1    | Cartagriem_011             | 2,321       |
+| 2    | War Dogs IV                | 2,144       |
+| 3    | Rain Delay                 | 1,636       |
+| 4    | Mikeswill                  | 1,515       |
+| 5    | Caffeinated                | 1,221       |
+| 6    | Dr_Hooves                  | 856         |
+| 7    | Yodle                      | 767         |
+| 8    | Apexiala                   | 722         |
+| 9    | Ferengi Alliance Union     | 682         |
+| 10   | Mikeshope                  | 624         |
+
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 1
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
 ### Season 2
 
-Season 2 saw 330,817 total trades, 146,980 of which were actual for bank trades. This amounts to - [ ] % of trades for value.
+>Buyer of Season 2:
 
-Of season 2, commons made up 211,879, of which 97,180 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 2, uncommons made up 69122 of which 25864 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 2, rares made up 18750, of which 8299 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 2, ultra-rares made up 11888, of which 6173 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 2, epics made up 13411, of which 6894 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 2, legendaries made up 5767, of which 2570 were sold for value. This amounts to - [ ] % of trades for value.
+| Rank | Trader                            | Money Moved |
+|------|-----------------------------------|-------------|
+| 1    | Mikeswill                          | 17,792      |
+| 2    | Noahs Second Country               | 14,215      |
+| 3    | Koem Kab                           | 10,639      |
+| 4    | New Makasta                        | 9,812       |
+| 5    | Seanat                             | 7,142       |
+| 6    | Witchcraft and Sorcery             | 5,255       |
+| 7    | A Share of the JPMorgan Chase      | 3,307       |
+| 8    | Giovanniland                       | 3,182       |
+| 9    | Annondor                            | 2,853       |
+| 10   | Rain Delay                          | 2,831       |
 
-S2 Rarity Averages
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 2
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-Common,6.06
-Uncommon,8.74
-Rare,2.35
-Ultra-Rare,3.49
-Epic,3.21
-Legendary,64.5
+> Buyer of Season 2 for more than 0:
 
-Buyer of Season 2:
+| Rank | Trader                              | Cards Bought |
+|------|-------------------------------------|-------------|
+| 1    | Annondor                            | 2,851       |
+| 2    | Rain Delay                          | 1,947       |
+| 3    | Ballo                               | 1,740       |
+| 4    | Il Sonno della Ragione Genera Mostri| 1,594       |
+| 5    | 9006                                | 1,542       |
+| 6    | Mikeswill                           | 1,491       |
+| 7    | Ferengi Alliance Union               | 1,054       |
+| 8    | Krupp Industries                    | 965         |
+| 9    | Apexiala                             | 910         |
+| 10   | Seanat                              | 890         |
 
-Mikeswill,17793
-Noahs Second Country,14220
-Koem Kab,10639
-New Makasta,9814
-Witchcraft and Sorcery,5255
-A Share of the JPMorgan Chase,3307
-Giovanniland,3182
-Annondor,2853
-Rain Delay,2831
-
-Buyer of Season 2 more than 0:
-
-Annondor,2851
-Rain Delay,1947
-Ballo,1740
-Il Sonno Della Ragione Genera Mostri,1595
-9006,1542
-Mikeswill,1491
-Ferengi Alliance Union,1054
-Krupp Industries,965
-Apexiala,910
-Seanat,890
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 2
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
 ### Season 3
 
-Season 3 saw 2,021,864 total trades, 933,020 of which were actual for bank trades. This amounts to - [ ] % of trades for value.
+>Buyer of Season 3:
 
-Of season 3, commons made up 942,410, of which 423,613 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 3, uncommons made up 416,297, of which 205,407 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 3, rares made up 195,610, of which 86,495 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 3, ultra-rares made up 175,070, of which 83,882 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 3, epics made up 219,391, of which 119,058 were sold for value. This amounts to - [ ] % of trades for value.
-Of season 3, legendaries made up 73,086, of which 14,565 were sold for value. This amounts to - [ ] % of trades for value.
+| Rank | Trader                     | Cards Bought |
+|------|----------------------------|-------------|
+| 1    | War Dogs IV                | 261,276     |
+| 2    | The Colonial Buccaruu      | 93,698      |
+| 3    | Dune Cat                   | 47,995      |
+| 4    | Giovanniland               | 30,277      |
+| 5    | Apexiala                    | 20,429      |
+| 6    | Giraffeton                  | 18,722      |
+| 7    | Il Sonno della Ragione Genera Mostri | 16,729 |
+| 8    | Fastercat                   | 16,710      |
+| 9    | Racoda                     | 16,226      |
+| 10   | Fauzjhia                    | 15,568      |
 
-S1 Rarity Averages
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 3
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-Common,0.76
-Uncommon,0.48
-Rare,1.23
-Ultra-Rare,1.21
-Epic,1.37
-Legendary,58.4
+> Buyer of Season 3 for more than 0:
 
-Buyer of Season 3:
+| Rank | Trader                              | Cards Bought |
+|------|-------------------------------------|-------------|
+| 1    | Dune Cat                            | 37,589      |
+| 2    | Giovanniland                        | 24,938      |
+| 3    | War Dogs IV                         | 19,698      |
+| 4    | Apexiala                             | 17,423      |
+| 5    | Il Sonno della Ragione Genera Mostri| 16,692      |
+| 6    | Frisbeeteria                        | 15,316      |
+| 7    | Giraffeton                           | 13,630      |
+| 8    | The North Pacific S3                | 12,075      |
+| 9    | Sentient Puppets                     | 10,417      |
+| 10   | New Makasta                          | 9,020       |
 
-War Dogs IV,261338
-The Colonial Buccaruu,93724
-Dune Cat,47995
-Giovanniland,30287
-Apexiala,20431
-Giraffeton,18722
-Il Sonno Della Ragione Genera Mostri,16732
-Fastercat,16712
-Racoda,16226
-Fauzjhia,15572
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND season = 3
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-Buyer of s3 more than 0:
+### Buyers By Rarity (for more than 0)
 
-Dune Cat,37589
-Giovanniland,24945
-War Dogs IV,19700
-Apexiala,17425
-Il Sonno Della Ragione Genera Mostri,16695
-Frisbeeteria,15318
-Giraffeton,13630
-The North Pacific S3,12075
-Sentient Puppets,10417
-New Makasta,9021
+> Top Buyers of Common Cards
 
-## Combined
+| Rank | Trader                              | Cards Bought |
+|------|-------------------------------------|-------------|
+| 1    | Giovanniland                        | 21,954      |
+| 2    | War Dogs IV                         | 18,071      |
+| 3    | Il Sonno della Ragione Genera Mostri| 15,848      |
+| 4    | Apexiala                             | 15,008      |
+| 5    | Giraffeton                           | 11,506      |
+| 6    | The North Pacific S3                | 9,231       |
+| 7    | Sentient Puppets                     | 6,016       |
+| 8    | Witchcraft and Sorcery               | 5,195       |
+| 9    | Concrete Slab                       | 4,900       |
+| 10   | Krupp Industries                    | 4,729       |
 
-Per season, the average price of a season 1 card was 7.17.
-Per season, the average price of a season 2 card was 7.10.
-Per season, the average price of a season 3 card was 1.76.
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'c'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-## Rarity Breakdown
+> Top buyers of Uncommon Cards
 
-The amount of money moved by category:
+| Rank | Trader                    | Cards Bought |
+|------|---------------------------|--------------|
+| 1    | Dune Cat                  | 37,578       |
+| 2    | Racoda                    | 5,202        |
+| 3    | S3 Rares Collector        | 4,049        |
+| 4    | Altivia Central Bank      | 3,369        |
+| 5    | War Dogs IV               | 2,941        |
+| 6    | Annondor                  | 2,705        |
+| 7    | Pierpontia                | 2,700        |
+| 8    | Rain Delay                | 2,563        |
+| 9    | Apexiala                   | 2,485        |
+| 10   | Giovanniland              | 2,372        |
 
-Legendary,1132470
-Epic,237588
-Ultra-Rare,130665
-Rare,131786
-Uncommon,373379
-Common,1107254
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'u'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-Top buyers of uncommon for more than 0:
+> Top buyers of Rare cards
 
-Dune Cat,37578
-Racoda,5202
-s3 Rares collector,4049
-Altivia Central Bank,3369
-War Dogs IV,2941
-Annondor,2705
-Pierpontia,2700
-Rain Delay,2564
-Apexiala,2485
-Giovanniland,2372
+| Rank | Trader                 | Cards Bought |
+|------|------------------------|--------------|
+| 1    | New Zander             | 7,635        |
+| 2    | S3 Rares Collector     | 2,185        |
+| 3    | Sentient Puppets       | 2,008        |
+| 4    | Annondor               | 1,797        |
+| 5    | Midlands               | 1,392        |
+| 6    | Pierpontia             | 1,296        |
+| 7    | Demeter                | 1,210        |
+| 8    | Rain Delay             | 1,051        |
+| 9    | Slaggstone Bruntt      | 886          |
+| 10   | Krupp Industries       | 846          |
 
-The top buyers of rare for more than 0:
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'r'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-New Zander,7643
-S3 Rares Collector,2185
-Sentient Puppets,2008
-Annondor,1797
-Midlands,1392
-Pierpontia,1296
-Demeter,1210
-Rain Delay,1051
-Slaggstone Bruntt,886
-Krupp Industries,846
+> Top buyers of ultra-rares
 
-The top buyers of epic for more than 0:
+| Rank | Trader             | Cards Bought |
+|------|--------------------|--------------|
+| 1    | Radicalania        | 6,501        |
+| 2    | Ostrovskiy         | 6,447        |
+| 3    | Midlands           | 2,340        |
+| 4    | Demeter            | 1,662        |
+| 5    | Rain Delay         | 1,156        |
+| 6    | Mikeswill          | 1,140        |
+| 7    | Fauzjhia           | 776          |
+| 8    | Timao              | 740          |
+| 9    | Giraffeton         | 684          |
+| 10   | Slaggstone Bruntt  | 662          |
 
-Frisbeeteria,15536
-Fauzjhia,3874
-Tuptoogza,2067
-Midlands,2053
-Altvia Stock Exchange,1850
-Celzhi,1781
-Timao,1751
-DiscGolfLand,1642
-Shion Uzuki,1583
-Auranzjinilhe,1350
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'ur'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
-The top buyers of commons for more than 0:
+> Top Buyers of Epics
 
-Giovanniland,21961
-War Dogs IV,18073
-Il Sonno Della Ragione Genera Mostri,15850
-Apexiala,15010
-Giraffeton,11506
-The North Pacific S3,9231
-Sentient Puppets,6016
-Witchcraft and Sorcery,5195
-Concrete Slab,4902
-Krupp Industries,4729
+| Rank | Trader                     | Cards Bought |
+|------|----------------------------|--------------|
+| 1    | Frisbeeteria               | 15,534       |
+| 2    | Fauzjhia                   | 3,873        |
+| 3    | Tuptoogza                  | 2,067        |
+| 4    | Midlands                   | 2,052        |
+| 5    | Altivia Stock Exchange     | 1,850        |
+| 6    | Celzlhi                    | 1,780        |
+| 7    | Timao                      | 1,749        |
+| 8    | Discgolfland               | 1,641        |
+| 9    | Shion Uzuki                | 1,582        |
+| 10   | Auranzjinilhe               | 1,350       |
 
-The top buyers of ultra-rares for more than 0:
-Radicalania,6501
-Ostrovskiy,6447
-Midlands,2340
-Demeter,1662
-Mikeswill,1141
-Fauzjhia,776
-Timao,740
-Giraffeton,684
-Slaggstone_Bruntt,662
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'e'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most buys of legendaries
+
+| Rank | Trader                                | Trade Count |
+|------|---------------------------------------|-------------|
+| 1    | Koem Kab                              | 8,604       |
+| 2    | Noah's Second Country                 | 7,789       |
+| 3    | Mikeswill                             | 4,508       |
+| 4    | Seanat                                | 2,150       |
+| 5    | Thorn1000                             | 1,833       |
+| 6    | New Makasta                           | 1,803       |
+| 7    | Portsville                            | 1,567       |
+| 8    | National Park Service                 | 1,539       |
+| 9    | Varanius                              | 1,479       |
+| 10   | Osheiga                               | 1,399       |
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'l'
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most buys of legs for more than 0
+
+| Rank | Trader                                | Trade Count |
+|------|---------------------------------------|-------------|
+| 1    | Koem Kab                              | 2,272       |
+| 2    | Noah's Second Country                 | 1,232       |
+| 3    | Mikeswill                             | 1,004       |
+| 4    | Seanat                                | 815         |
+| 5    | Portsville                            | 695         |
+| 6    | Thorn1000                             | 452         |
+| 7    | New Makasta                           | 451         |
+| 8    | Osheiga                               | 326         |
+| 9    | The Shaymen                           | 293         |
+| 10   | Vulxo                                 | 291         |
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'l'
+	AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most Active Gifters of Legendaries
+
+SELECT seller, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'l'
+	AND PRICE = 0
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+
+> Highest number of legendaries gifted (sold for 0):
+
+| Rank | Trader                        | Trade Count |
+|------|-------------------------------|-------------|
+| 1    | Seanat                        | 436         |
+| 2    | Valoptia                      | 415         |
+| 3    | Lackadaisia                   | 384         |
+| 4    | The Chinese Soviet            | 374         |
+| 5    | 9006                          | 314         |
+| 6    | Refuge Isle                   | 274         |
+| 7    | ROM                           | 270         |
+| 8    | Thorn1000                     | 259         |
+| 9    | The Northern Light            | 251         |
+| 10   | Greatest Chernobyl            | 223         |
+
+> Highest number of legendaries received for 0:
+
+| Rank | Trader                      | Trade Count |
+|------|-----------------------------|-------------|
+| 1    | Noah's Second Country       | 6,557       |
+| 2    | Koem Kab                    | 6,332       |
+| 3    | Mikeswill                   | 3,504       |
+| 4    | National Park Service       | 1,471       |
+| 5    | Thorn1000                   | 1,381       |
+| 6    | New Makasta                 | 1,352       |
+| 7    | Seanat                      | 1,335       |
+| 8    | Varanius                    | 1,278       |
+| 9    | Osheiga                     | 1,073       |
+| 10   | Valoptia                    | 917         |
+
+SELECT buyer, COUNT(*)
+FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND category = 'l'
+	AND PRICE = 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+## Some Rarity Breakdowns
 
 ### Common
 
 Most expensive common trades of the year
 
-Buyer,Price,Seller,Timestamp,Card
+| Rank | Seller                   | Buyer                        | Price   | Card                                   | Date       |
+|------|--------------------------|------------------------------|---------|----------------------------------------|------------|
+| 1    | 9006                     | 9003                         | 5000.0  | S2 Common HMS Warmaiden               | 2023-02-22 |
+| 2    | 9006                     | 9003                         | 3000.0  | S2 Common Trytuio                     | 2023-04-17 |
+| 3    | 9006                     | 9003                         | 2000.0  | S2 Common Barbaria Trade Federation   | 2023-04-09 |
+| 4    | Rastarda                 | Axixic                       | 1000.0  | S1 Common The Britannian Order        | 2023-06-27 |
+| 5    | Axixic                   | Rastarda                     | 901.1   | S1 Common The Britannian Order        | 2023-06-27 |
+| 6    | Some Random TNP Nation   | Aerilia                      | 750.0   | S2 Common Zazquatch                   | 2023-07-11 |
+| 7    | Dorti Saingsmeistan      | Aerilia                      | 750.0   | S2 Common Zazquatch                   | 2023-07-11 |
+| 8    | Aerilla                  | Aerilia                      | 750.0   | S2 Common Zazquatch                   | 2023-07-11 |
+| 9    | Decen Inn Ash            | Aerilla                      | 705.0   | S2 Common Zazquatch                   | 2023-07-11 |
+| 10   | Purple Fairy             | Dorti Saingsmeistan           | 696.0   | S2 Common Zazquatch                   | 2023-07-11 |
 
-9006,5000,9003,1677073733,S2 HMS Warmaiden
-9006,3000,9003,1681750366,S2 Trytuio
-9006,2000,9003,1680999227,S2 Barbaria Trade Federation
-Axixic,1000,Rastarda,1687850433,S1 The Britannian Order
-Rastarda,901.1,Axixic,1687854465,S1 The Britannian Order
-Aerilia,750,Some Random TNP Nation,1689043198,S2 Zazquatch
-Aerilia,750,Dorti Saingsmeistan,1689043198,S2 Zazquatch
-Aerilia,750,Aerilia,1689043198,S2 Zazquatch
-Aerilia,705,Decen Inn Ash,1689051255,S2 Zazquatch
-Dorti Saingsmeistan,696,Purple Fairy,1689051255,S2 Zazquatch
 
-### Epic
-
-Most expensive epic trades of the year
-
-Buyer,Price,Seller,Timestamp,Card
-
-9006,6000,9003,1703083422,S1 9003
-9006,3999.75,Midlands,1696901348,S1 9003
-9006,2000,Osheiga,1690580304,S1 9003
-9006,2000,Timao,1690576377,S1 9003
-9006,1110,900101,1692552087,S1 9003
-9006,1099.29,900101,1692552087,S1 9003
-Federationalism,1000.5,900103,1692557404,S1 9003
-900100,1000,900104,1692565623,S1 9003
-900101,1000,900102,1692557404,S1 9003
-9006,1000,9003,1684864019,S1 9003
-
-### Legendary
-
-Most Traded Legendary:
-S3 The Stalker,146
-S3 Valkalan,144
-S3 Sacara,143
-S3 Lamoni,121
-S3 Koem Kab,121
-S2 Australian rePublic,121
-S2 Undivulged Principles,113
-S3 YoriZ,109
-S3 Wrapper,109
-S3 Separatist Peoples,105
-
-Most Money Moved Per Leg:
-
-S3 Annihilators of Chan Island,40000.09
-S3 The Stalker,21509.52
-S2 Sacara,20563.57
-S3 Racoda,17975.14
-S3 Crazy Girl,17869.38
-S3 Sedgistan,16638.13
-S3 Giovanniland,16051.36
-S3 Noahs Second Country,15533.62
-S2 S_diego,15372.87
-S3 Morover,14054.69
-
-Most expensive S1 Legendary Trades
-
-Aragesh,1600,Aerilia,1692544533,Soops
-The First Galactic Republic,1000,Alcala-Cordel,1681028824,Testlandia
-Tape,900,Refuge Isle,1698687086,Testlandia
-Numero Capitan,862.22,Racoda,1690195345,Foucalts Garden
-Federationalism,800,Izern,1687557820,Testlandia
-Portsville,755,Refuge Isle,1701293117,Testlandia
-Succedania,750.01,Refuge Isle,1701481171,Testlandia
-Osheiga,750,Portsville,1690749274,Rubyna
-War Dogs IV,750,Elegarth,1699636194,Rubyna
-New Kowloon Bay,739.89,Racoda,1692977781,Nervun
-
-Most expensive Legendary trades of the year
-
-Buyer,Price,Seller,Timestamp,Card
-National Park Service,10000,Lanterp,1693812600,S3 Annihilators of Chan Island
-Noahs Second Country,10000,New Zander,1692128067,S3 Annihilators of Chan Island
-Valkyrie Reborn,9999.99,Feu De Glace,1696198849,S3 Annihilators of Chan Island
-Osheiga,5000.5,Lilanina,1693369845,S3 Annihilators of Chan Island
-Aerilia,5000,United Worlds of Waifuland,1698909750,S3 Annihilators of Chan Island
-Aerilia,4500,Abolished Reality,1698918027,S3 Morover
-Fauzjhia,4444.67,Noahs Second Country,1681069644,S3 Morover
-National Park Service,2000,Tupan,1692238901,S3 Chan Island
-Siwale,2000,9006,1703563586,S3 Morover
-Aragesh,1600,Aerilia,1692544533,S1 Soops
-
-### Rare
-
-9006,1000,9003,1683046923,S2 Shin Bet
-Upper Tuchoim,350,TheLandofFunFunFun,1694578958,S3 Upper Tuchoim
-Upper Tuchoim,333.33,Vylixan Dora,1703882177,S3 Upper Tuchoim
-Upper Tuchoim,333.33,Calyxion,1703351830,S3 Upper Tuchoim
-Upper Tuchoim,333.33,Tropical Isles,1703314928,S3 Upper Tuchoim
-Upper Tuchoim,333.33,Volstrostia,1702106374,S3 Upper Tuchoim
-Upper Tuchoim,333.33,War Dogs IV,1701840801,S3 Upper Tuchoim
-Bigboy245,319,Upper Tuchoim,1694830466,S3 Upper Tuchoim
-Bigboy170,314,Big Boy 245,1694826674,S3 Upper Tuchoim
-Bigboy184,302,Big Boy 170,1694818161,S3 Upper Tuchoim
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'c'
+ORDER BY price DESC
+LIMIT 10;
 
 ### Uncommon
 
-Varanius,2000,vara_3,1702102123,S2 Varanius
-Varanius,2000,vara_1,1702102123,S2 Varanius
-Varanius,2000,vara_2,1702102123,S2 Varanius
-Varanius,2000,vara_5,1702102122,S2 Varanius
-Varanius,2000,vara_4,1702102122,S2 Varanius
-Vara_2,1800.02,vara_6,1702106235,S2 Varanius
-vara_3,1800.02,vara_7,1702106235,S2 Varanius
-vara_5,1800.01,vara_9,1702106235,S2 Varanius
-vara_4,1800.01,vara_8,1702106235,S2 Varanius
-vara_1,1800,vara_10,1702106235,S2 Varanius
+| Rank | Seller   | Buyer   | Price   | Card                   | Date       |
+|------|----------|---------|---------|------------------------|------------|
+| 1    | Varanius | Vara 3  | 2000.0  | S2 Uncommon Varanius   | 2023-12-09 |
+| 2    | Varanius | Vara 1  | 2000.0  | S2 Uncommon Varanius   | 2023-12-09 |
+| 3    | Varanius | Vara 2  | 2000.0  | S2 Uncommon Varanius   | 2023-12-09 |
+| 4    | Varanius | Vara 5  | 2000.0  | S2 Uncommon Varanius   | 2023-12-09 |
+| 5    | Varanius | Vara 4  | 2000.0  | S2 Uncommon Varanius   | 2023-12-09 |
+| 6    | Vara 2   | Vara 6  | 1800.02 | S2 Uncommon Varanius   | 2023-12-09 |
+| 7    | Vara 3   | Vara 7  | 1800.02 | S2 Uncommon Varanius   | 2023-12-09 |
+| 8    | Vara 5   | Vara 9  | 1800.01 | S2 Uncommon Varanius   | 2023-12-09 |
+| 9    | Vara 4   | Vara 8  | 1800.01 | S2 Uncommon Varanius   | 2023-12-09 |
+| 10   | Vara 1   | Vara 10 | 1800.0  | S2 Uncommon Varanius   | 2023-12-09 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'u'
+ORDER BY price DESC
+LIMIT 10;
+
+### Rare
+
+| Rank | Seller            | Buyer             | Price  | Card                         | Date       |
+|------|-------------------|-------------------|--------|------------------------------|------------|
+| 1    | 9003              | 9006              | 1000.0 | S2 Shin Bet                  | 2023-05-02 |
+| 2    | Upper Tuchoim     | TheLandOfFunFunFun | 350.0  | S3 Upper Tuchoim             | 2023-09-13 |
+| 3    | Upper Tuchoim     | Vylixan Dora       | 333.33 | S3 Upper Tuchoim             | 2023-12-29 |
+| 4    | Upper Tuchoim     | Calyxion           | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
+| 5    | Upper Tuchoim     | Tropical Isles     | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
+| 6    | Upper Tuchoim     | Volstrostia        | 333.33 | S3 Upper Tuchoim             | 2023-12-09 |
+| 7    | Upper Tuchoim     | War Dogs IV        | 333.33 | S3 Upper Tuchoim             | 2023-12-06 |
+| 8    | Bigboy245         | Upper Tuchoim      | 319.0  | S3 Upper Tuchoim             | 2023-09-16 |
+| 9    | Bigboy170         | Bigboy245          | 314.0  | S3 Upper Tuchoim             | 2023-09-16 |
+| 10   | Bigboy184         | Bigboy170          | 302.0  | S3 Upper Tuchoim             | 2023-09-15 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'r'
+ORDER BY price DESC
+LIMIT 10;
 
 ### Ultra-Rare
-New Kowloon Bay,1261,Upper Tuchoim,1689007304,S3 New Kowloon Bay
-90013,420.24,DiscGolfLand,1673735800,S2 9003
-9009,420.12,Byzkorda,1673735800,S2 9003
-New Kowloon Bay,399.99,Tmasirtup,1693014378,Improving Wordiness
-9001,390,Natzen,1680995274,S2 9003
-Brexas7,273.02,Mikeswill,1696812617,S1 Brexas
-Brexas7,250.0,,Koshava,1702905639,S1 Brexas
-Brexas7,200.05,Portsville,1684738125,S1 Brexas
-Brexas7,200.03,Varanius,1698529013,S1 Brexas 2
-The Funian Conduit,160.2,TheLandOfFunFunFun,1680031407,S3 TheLandOfFunFunFun
+
+| Rank | Seller                  | Buyer               | Price  | Card                                 | Date       |
+|------|-------------------------|---------------------|--------|--------------------------------------|------------|
+| 1    | Upper Tuchoim           | New Kowloon Bay     | 1261.0 | S3 New Kowloon Bay       | 2023-07-10 |
+| 2    | Discgolfland            | 90013               | 420.24 | S2 9003                  | 2023-01-14 |
+| 3    | ByzKorda                | 9009                | 420.12 | S2 9003                  | 2023-01-14 |
+| 4    | Tmasirtup               | New Kowloon Bay     | 399.99 | S1 Improving Wordiness   | 2023-08-26 |
+| 5    | Nazten                  | 9001                | 390.0  | S2 9003                  | 2023-04-08 |
+| 6    | Mikeswill               | Brexas7             | 273.02 | S1 Brexas                | 2023-10-09 |
+| 7    | Koshava                 | Brexas7             | 250.0  | S1 Brexas                | 2023-12-18 |
+| 8    | Portsville              | Brexas7             | 200.05 | S1 Brexas                | 2023-05-22 |
+| 9    | Varanius                | Brexas7             | 200.03 | S1 Brexas2               | 2023-10-28 |
+| 10   | TheLandOfFunFunFun      | The Funian Conduit  | 160.2  | S3 TheLandOfFunFunFun     | 2023-03-28 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'ur'
+ORDER BY price DESC
+LIMIT 10;
+
+
+### Epic
+
+| Rank | Seller          | Buyer           | Price  | Card        | Date       |
+|------|-----------------|------------------|--------|-------------|------------|
+| 1    | 9003            | 9006            | 6000.0 | S1 9003 | 2023-12-20 |
+| 2    | Midlands         | 9006            | 3999.75| S1 9003 | 2023-10-10 |
+| 3    | Osheiga          | 9006            | 2000.0 | S1 9003 | 2023-07-28 |
+| 4    | Timao            | 9006            | 2000.0 | S1 9003 | 2023-07-28 |
+| 5    | 900100           | 9006            | 1110.0 | S1 9003 | 2023-08-20 |
+| 6    | 900101           | 9006            | 1099.29| S1 9003 | 2023-08-20 |
+| 7    | 900103           | Federationalism | 1000.5 | S1 9003 | 2023-08-20 |
+| 8    | 900104           | 900100          | 1000.0 | S1 9003 | 2023-08-20 |
+| 9    | 900102           | 900101          | 1000.0 | S1 9003 | 2023-08-20 |
+| 10   | 9003            | 9006            | 1000.0 | S1 9003 | 2023-05-23 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'e'
+ORDER BY price DESC
+LIMIT 10;
+
+### Legendary
+
+> Most expensive legendary trades of the year
+
+| Rank | Seller                   | Buyer                     | Price   | Card                                     | Date       |
+|------|--------------------------|---------------------------|---------|------------------------------------------|------------|
+| 1    | Ianaterp                  | National Park Service     | 10000.0 | S3 Annihilators of Chan Island | 2023-09-04 |
+| 2    | New Zander                | Noahs Second Country      | 10000.0 | S3 Annihilators of Chan Island | 2023-08-15 |
+| 3    | Feu De Glace              | Valkyrie Reborn            | 9999.99 | S3 Annihilators of Chan Island | 2023-10-01 |
+| 4    | Lilanina                  | Osheiga                   | 5000.5  | S3 Annihilators of Chan Island | 2023-08-30 |
+| 5    | United Worlds of Waifuland| Aerilia                   | 5000.0  | S3 Annihilators of Chan Island | 2023-11-02 |
+| 6    | Abolished Reality         | Aerilia                   | 4500.0  | S3 Morover                      | 2023-11-02 |
+| 7    | Noahs Second Country      | Fauzjhia                  | 4444.67 | S3 Morover                      | 2023-04-09 |
+| 8    | Tupan                     | National Park Service     | 2000.0  | S3 Chan Island                  | 2023-08-17 |
+| 9    | 9006                      | Siwale                    | 2000.0  | S3 Morover                      | 2023-12-26 |
+| 10   | Aerilia                   | Aragesh                   | 1600.0  | S1 Soops                        | 2023-08-20 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'l'
+ORDER BY price DESC
+LIMIT 10;
+
+> Most expensive S1 legendary trades of the year
+
+| Rank | Seller                 | Buyer                  | Price   | Card                  | Date       |
+|------|------------------------|------------------------|---------|-----------------------|------------|
+| 1    | Aerilia                | Aragesh                | 1600.0  | S1 Soops    | 2023-08-20 |
+| 2    | Alcala Cordel          | The First Galactic Republic | 1000.0  | S1 Testlandia | 2023-04-09 |
+| 3    | Refuge Isle            | Tape                   | 900.0   | S1 Testlandia | 2023-10-30 |
+| 4    | Racoda                 | Numero Capitan         | 862.22  | S1 Foucaults Garden | 2023-07-24 |
+| 5    | Izern                  | Federationalism        | 800.0   | S1 Testlandia | 2023-06-23 |
+| 6    | Refuge Isle            | Portsville             | 755.0   | S1 Testlandia | 2023-11-29 |
+| 7    | Refuge Isle            | Succedania             | 750.01  | S1 Testlandia | 2023-12-02 |
+| 8    | Portsville             | Osheiga                | 750.0   | S1 Rubyna   | 2023-07-30 |
+| 9    | Elegarth               | War Dogs IV            | 750.0   | S1 Rubyna   | 2023-11-10 |
+| 10   | Racoda                 | New Kowloon Bay        | 738.89  | S1 NERVUN   | 2023-08-25 |
+
+SELECT
+    seller,
+    buyer,
+    price,
+    strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND price > 0
+  AND CATEGORY = 'l'
+  AND SEASON = 1
+ORDER BY price DESC
+LIMIT 10;
+
+> Most Traded Legendary (more than 0):
+
+| Rank | Card Name               | Trades |
+|------|-------------------------|--------|
+| 1    | S3 The Stalker          | 126    |
+| 2    | S3 Valkalan             | 117    |
+| 3    | S3 Koem Kab             | 97     |
+| 4    | S3 Australian rePublic  | 89     |
+| 5    | S3 Xagill               | 89     |
+| 6    | S3 Wrapper              | 87     |
+| 7    | S3 Felpolandia          | 86     |
+| 8    | S3 Siwale               | 85     |
+| 9    | S3 Corfad               | 83     |
+| 10   | S3 Lamoni               | 83     |
+
+SELECT
+    season,
+    card_name,
+	COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND CATEGORY = 'l'
+  AND PRICE > 0
+GROUP BY season, card_name
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most Money Moved Per Leg:
+
+| Rank | Card Name                     | Money Moved |
+|------|-------------------------------|-------------|
+| 3    | S3 Annihilators of Chan Island | 40000.49    |
+| 3    | S3 The Stalker                | 21509.52    |
+| 2    | S2 Sacara                     | 20563.57    |
+| 3    | S3 Racoda                     | 17975.14    |
+| 3    | S3 Crazy girl                 | 17869.38    |
+| 3    | S3 Sedgistan                  | 16638.13    |
+| 3    | S3 Giovanniland               | 16051.36    |
+| 3    | S3 Noahs Second Country        | 15533.62    |
+| 2    | S2 S_diego                    | 15372.87    |
+| 3    | S3 Morover                    | 14054.69    |
+
+SELECT
+    season,
+    card_name,
+	SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND CATEGORY = 'l'
+  AND PRICE > 0
+GROUP BY season, card_name
+ORDER BY SUM(price) DESC
+LIMIT 10;
 
 ## Chronos Breakdown
 
 ### First Half of the Year
 
-Top Money Movers:
+> Top Money Moved
 
-Noahs Second Country,59925
-Mikeswill,42387
-Seanat,26402
-9006,19667
-Koem Kab,19217
-Portsville,18240
-Fauzjhia,17731
-Osheiga,17544
-Varanius,16332
-Thorn1000,15578
+| Rank | Trader                   | Money Moved           |
+|------|--------------------------|-----------------------|
+| 1    | Noah's Second Country    | 135773.33             |
+| 2    | Mikeswill                | 88768.78              |
+| 3    | Seanat                   | 59438.93              |
+| 4    | Koem Kab                 | 51452.39              |
+| 5    | Osheiga                  | 46866.87              |
+| 6    | 9006                     | 42751.25              |
+| 7    | Fauzjhia                 | 41227.25              |
+| 8    | Portsville               | 37797.21              |
+| 9    | Giraffeton               | 34535.02              |
+| 10   | Thorn1000                | 32512.42              |
 
-most buys:
+SELECT
+    Trader,
+    SUM(Money_Moved) AS Total_Money_Moved
+FROM (
+    SELECT
+        buyer AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+    GROUP BY buyer
 
-War Dogs IV,100449
-Dune Cat,48862
-The Colonial Buccaruu,42122
-Racoda,17158
-Giovanniland,16970
-Mikeswill,16651
-Apexiala,14368
-The North Pacific S3,13450
-Noahs Second Country,13347
-Slaggstone Bruntt,12829
+    UNION ALL
 
-Most buys for more than 0:
+    SELECT
+        seller AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+      AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+    GROUP BY seller
+) AS CombinedResults
+GROUP BY Trader
+ORDER BY Total_Money_Moved DESC
+LIMIT 10;
 
-Dune Cat,37510
-War Dogs IV,14138
-The North Pacific S3,12071
-Giovanniland,11713
-Apexiala,11399
-Il Sonno Della Ragione Genera Mostri,10028
-Frisbeeteria,8810
-Annondor,8721
-S3 Rares Collector,6947
-Giraffeton,6532
+> Top Money Moved (buyer)
 
-Most sells:
+| Rank | Trader               | Money_Moved           |
+|------|----------------------|-----------------------|
+| 1    | Noahs Second_Country | 59924.76              |
+| 2    | Mikeswill             | 42387.20              |
+| 3    | Seanat               | 26402.06              |
+| 4    | 9006                 | 19667.27              |
+| 5    | Koem Kab              | 19217.22              |
+| 6    | Portsville            | 18240.34              |
+| 7    | Fauzjhia              | 17731.29              |
+| 8    | Osheiga               | 17543.93              |
+| 9    | Varanius              | 16332.42              |
+| 10   | Thorn1000             | 15578.46              |
 
-War Dogs IV,24218
-Noahs Second Country,9214,
-Mikeswill,7634,
-A Share of the JP Morgan Chase,6067
-Seanat,5627
-Axixic,4915
-Fauzjhia,4746
-New Makasta,4381
-Witchcraft and Sorcery,3685
-Il Sonno Della Ragione Genera Mostri,3152
+SELECT
+    buyer,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+GROUP BY buyer
+ORDER BY SUM(price) DESC
+LIMIT 10;
 
-Most sells for more than 0:
+> Top Money Moved (seller)
 
-War Dogs Iv,8697
-Noahs Second Country,7067
-Axixic,4750
-New Makasta,4318
-Mikeswill,4037
-Seanat,3728
-Witchcraft and Sorcery,3421
-Il Sonno Della Ragione Genera Mostri,3152
-Koem Kab,3079
-Krupp Industries,2762
+| Rank | Trader               | Money_Moved           |
+|------|----------------------|-----------------------|
+| 1    | Noahs_Second_Country | 75848.57              |
+| 2    | Mikeswill             | 46381.58              |
+| 3    | Seanat               | 33036.87              |
+| 4    | Koem_Kab              | 32235.17              |
+| 5    | Osheiga               | 29322.94              |
+| 6    | Giraffeton            | 24813.47              |
+| 7    | Fauzjhia              | 23495.96              |
+| 8    | 9006                 | 23083.98              |
+| 9    | Portsville            | 19556.87              |
+| 10   | New_Makasta           | 17329.53              |
+
+SELECT
+    seller,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+GROUP BY seller
+ORDER BY SUM(price) DESC
+LIMIT 10;
+
+> Most Buys
+
+| Rank | Trader                  | Cards Bought |
+|------|-------------------------|--------------|
+| 1    | War Dogs IV             | 100449       |
+| 2    | Dune Cat                | 48862        |
+| 3    | The Colonial Buccaruu   | 42122        |
+| 4    | Racoda                  | 17158        |
+| 5    | Giovanniland            | 16970        |
+| 6    | Mikeswill               | 16651        |
+| 7    | Apexiala                | 14368        |
+| 8    | The North Pacific S3    | 13450        |
+| 9    | Noahs Second Country    | 13347        |
+| 10   | Slaggstone Bruntt       | 12829        |
+
+SELECT
+    buyer,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most buys for more than 0:
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | Dune Cat                            | 37510        |
+| 2    | War Dogs IV                         | 14138        |
+| 3    | The North Pacific S3                | 12071        |
+| 4    | Giovanniland                        | 11713        |
+| 5    | Apexiala                             | 11399        |
+| 6    | Il Sonno Della Ragione Genera Mostri | 10028        |
+| 7    | Frisbeeteria                        | 8810         |
+| 8    | Annondor                            | 8721         |
+| 9    | S3 Rares Collector                  | 6947         |
+| 10   | Giraffeton                          | 6532         |
+
+SELECT
+    buyer,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+  AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most sells:
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | War Dogs IV                         | 24218        |
+| 2    | Noahs Second Country                | 9214         |
+| 3    | Mikeswill                           | 7634         |
+| 4    | A Share of the JPMorgan Chase       | 6067         |
+| 5    | Seanat                              | 5627         |
+| 6    | Axixic                              | 4915         |
+| 7    | Fauzjhia                            | 4746         |
+| 8    | New Makasta                         | 4381         |
+| 9    | Witchcraft and Sorcery              | 3685         |
+| 10   | Il Sonno Della Ragione Genera Mostri | 3152        |
+
+SELECT
+    seller,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most sells for more than 0:
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | War Dogs IV                         | 8697         |
+| 2    | Noahs Second Country                | 7067         |
+| 3    | Axixic                              | 4750         |
+| 4    | New Makasta                         | 4318         |
+| 5    | Mikeswill                           | 4037         |
+| 6    | Seanat                              | 3728         |
+| 7    | Witchcraft and Sorcery              | 3421         |
+| 8    | Il Sonno Della Ragione Genera Mostri | 3152        |
+| 9    | Koem Kab                            | 3079         |
+| 10   | Krupp Industries                    | 2762         |
+
+SELECT
+    seller,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2023-07-01 00:00:00')
+  AND PRICE > 0
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
 ### Last Half of the Year
 
-Top Money Movers:
+> Top Money Moved
 
-Koem Kab,65480
-Osheiga,45074
-Mikeswill,34041
-Varanius,32080
-Noahs Second Country,30105
-Seanat,28436
-Upper Tuchoim,25593
-Vulxo,25480
-Giovanniland,23141
-Aerilia,22435
+| Rank | Trader                   | Money Moved           |
+|------|--------------------------|-----------------------|
+| 1    | Koem Kab                 | 124094.34             |
+| 2    | Mikeswill                | 98365.91              |
+| 3    | Noah's Second Country    | 87433.67              |
+| 4    | Osheiga                  | 84516.46              |
+| 5    | Varanius                 | 71317.45              |
+| 6    | Giovanniland             | 53957.49              |
+| 7    | Upper Tuchoim            | 53916.52              |
+| 8    | Seanat                   | 53448.88              |
+| 9    | Vulxo                    | 52174.08              |
+| 10   | Panagouge                | 41919.98              |
 
-Most Buys:
+SELECT
+    Trader,
+    SUM(Money_Moved) AS Total_Money_Moved
+FROM (
+    SELECT
+        buyer AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+    GROUP BY buyer
 
-War Dogs IV,165205
-The Colonial Buccaruu,53185
-Koem Kab,18564
-Giovanniland,17112
-Mikeswill,12155
-Fauzjhia,11746
-New Makasta,10802
-War Dogs VI,10278
-Apexiala,9607
-Noahs Second Country,9285
+    UNION ALL
 
-Most buys for more than 0:
+    SELECT
+        seller AS Trader,
+        SUM(price) AS Money_Moved
+    FROM trades
+    WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+      AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+    GROUP BY seller
+) AS CombinedResults
+GROUP BY Trader
+ORDER BY Total_Money_Moved DESC
+LIMIT 10;
 
-Giovanniland,13582
-Il Sonno Della Ragione Genera Mostri,8759
-New Zander,8052
-War Dogs IV,7892
-Apexiala,7658
-Giraffeton,7161
-Frisbeeteria,6737
-Midlands,5221
-Sentient Puppets,5137
-Rain Delay,5006
+> Top Money Movers (buyer):
 
-Most Sell
+| Rank | Trader                   | Money Moved           |
+|------|--------------------------|-----------------------|
+| 1    | Koem Kab                 | 65378.78              |
+| 2    | Osheiga                  | 45074.00              |
+| 3    | Mikeswill                | 34041.00              |
+| 4    | Varanius                 | 32080.17              |
+| 5    | Noah's Second Country    | 30105.28              |
+| 6    | Seanat                   | 28435.55              |
+| 7    | Vulxo                    | 25479.53              |
+| 8    | Upper Tuchoim            | 25266.64              |
+| 9    | Giovanniland             | 23139.56              |
+| 10   | Aerilia                  | 22435.47              |
 
-War Dogs IV,24656
-Fauzjhia,9720
-Koem Kab,5793
-Noahs Second Country,5758
-A SHare of the JPMorgan Chase,5555
-Mikeswill,5019
-Thorn1000,4616
-Seanat,4335
-The Colonial Buccaruu,4097
-New Makasta,3995
+SELECT
+    buyer,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY buyer
+ORDER BY SUM(price) DESC
+LIMIT 10;
 
-Most sell for more than 0
+> Top Money Movers (seller):
 
-War Dogs IV,15690
-Koem Kab,5790
-Noahs Second Country,5745
-New Makasta,3958
-Thorn1000,3735
-Axixic,3609
-Il Sonno Della Ragione Genera Mostri,3504
-Mikeswill,3441
-Fauzjhia,2943
-Krupp Industries,2773
+| Rank | Trader                   | Money Moved           |
+|------|--------------------------|-----------------------|
+| 1    | Mikeswill                | 64324.91              |
+| 2    | Koem Kab                 | 58715.56              |
+| 3    | Noah's Second Country    | 57328.39              |
+| 4    | Osheiga                  | 39442.46              |
+| 5    | Varanius                 | 39237.28              |
+| 6    | Giovanniland             | 30817.93              |
+| 7    | Upper Tuchoim            | 28649.88              |
+| 8    | Vulxo                    | 26694.55              |
+| 9    | Panagouge                 | 25716.52              |
+| 10   | Seanat                   | 25013.33              |
+
+SELECT
+    seller,
+    SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY seller
+ORDER BY SUM(price) DESC
+LIMIT 10;
+
+> Most Buys:
+
+| Rank | Trader                   | Cards Bought |
+|------|--------------------------|--------------|
+| 1    | War Dogs IV              | 165142       |
+| 2    | The Colonial Buccaruu    | 53158        |
+| 3    | Koem Kab                 | 18556        |
+| 4    | Giovanniland             | 17102        |
+| 5    | Mikeswill                | 12151        |
+| 6    | Fauzjhia                 | 11742        |
+| 7    | New Makasta              | 10799        |
+| 8    | War Dogs VI              | 10272        |
+| 9    | Apexiala                 | 9605         |
+| 10   | Noah's Second Country    | 9279         |
+
+SELECT
+    buyer,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most buys for more than 0:
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | Giovanniland                       | 13575        |
+| 2    | Il Sonno della Ragione Genera Mostri| 8755         |
+| 3    | New Zander                          | 8044         |
+| 4    | War Dogs IV                         | 7890         |
+| 5    | Apexiala                             | 7656         |
+| 6    | Giraffeton                           | 7161         |
+| 7    | Frisbeeteria                         | 6735         |
+| 8    | Midlands                             | 5220         |
+| 9    | Sentient Puppets                     | 5137         |
+| 10   | Rain Delay                           | 5004         |
+
+SELECT
+    buyer,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+GROUP BY buyer
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most Sell
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | War Dogs IV                         | 24646        |
+| 2    | Fauzjhia                            | 9716         |
+| 3    | Koem Kab                            | 5793         |
+| 4    | Noahs Second Country                | 5763         |
+| 5    | A Share of the JPMorgan Chase       | 5550         |
+| 6    | Mikeswill                           | 5012         |
+| 7    | Thorn1000                           | 4620         |
+| 8    | Seanat                              | 4335         |
+| 9    | The Colonial Buccaruu               | 4095         |
+| 10   | New Makasta                         | 4000         |
+
+SELECT
+    seller,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+> Most sell for more than 0
+
+| Rank | Trader                             | Cards Bought |
+|------|------------------------------------|--------------|
+| 1    | War Dogs IV                         | 15684        |
+| 2    | Koem Kab                            | 5790         |
+| 3    | Noahs Second Country                | 5750         |
+| 4    | New Makasta                         | 3963         |
+| 5    | Thorn1000                           | 3739         |
+| 6    | Axixic                              | 3608         |
+| 7    | Il Sonno della Ragione Genera Mostri| 3503         |
+| 8    | Mikeswill                           | 3434         |
+| 9    | Fauzjhia                            | 2943         |
+| 10   | Krupp Industries                    | 2770         |
+
+SELECT
+    seller,
+    COUNT(*)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+GROUP BY seller
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+
+## Time and Day Stuff
 
 The day in which the most money was transferred on the market was December 9th at 7 AM UTC, which totaled 13994.06.
 
-The top 5 trades
-vara_2,S2 Uncommon Varanius,1800.02,vara_6
-vara_3,S2 Uncommon Varanius,1800.02,vara_7
-vara_5,S2 Uncommon Varanius,1800.01,vara_9
-vara_4,S2 Uncommon Varanius,1800.01,vara_8
-vara_1,S2 Uncommon Varanius,1800.00,vara_10
+SELECT 
+  strftime('%j %H', timestamp, 'unixepoch') AS hour_of_year,
+  SUM(price) AS total_money_moved
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY hour_of_year
+ORDER BY total_money_moved DESC
+LIMIT 1;
+
+> The top 5 trades
+
+| Rank | Seller      | Buyer      | Price   | Card                     |
+|------|-------------|------------|---------|--------------------------|
+| 1    | Vara 6       | Vara 2     | 1800.02 | S2 Uncommon Varanius    |
+| 2    | Vara 7       | Vara 3     | 1800.02 | S2 Uncommon Varanius    |
+| 3    | Vara 9       | Vara 5     | 1800.01 | S2 Uncommon Varanius    |
+| 4    | Vara 8       | Vara 4     | 1800.01 | S2 Uncommon Varanius    |
+| 5    | Vara 10      | Vara 1     | 1800.0  | S2 Uncommon Varanius    |
+
+
+SELECT seller, buyer, price,     
+	strftime('%Y-%m-%d', timestamp, 'unixepoch') as readable_date,
+    season || ' ' || category || ' ' || card_name AS consolidated_info
+FROM trades
+WHERE strftime('%j %H', timestamp, 'unixepoch') = '343 07'
+ORDER BY price DESC
+LIMIT 5;
 
 The day in which the most trades occured on the market was Jan 26th at 10 pm utc, a total of 2060.
 
+SELECT 
+  strftime('%j %H', timestamp, 'unixepoch') AS hour_of_year,
+  COUNT(*) AS total_trades
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-07-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY hour_of_year
+ORDER BY total_trades DESC
+LIMIT 1;
+
 The most active buyer at the time was The North Pacific S3, at 1011. Conversely, the most active seller was Amphibian Manifesto, at 49.
+
+SELECT buyer, COUNT(buyer) AS buyer_count
+FROM trades
+WHERE strftime('%j %H', timestamp, 'unixepoch') = '026 22'
+GROUP BY buyer
+ORDER BY buyer_count DESC
+LIMIT 1;
+
+SELECT seller, COUNT(seller) AS seller_count
+FROM trades
+WHERE strftime('%j %H', timestamp, 'unixepoch') = '026 22'
+GROUP BY seller
+ORDER BY seller_count DESC
+LIMIT 1;
 
 ### Hour of the Day
 Hour of the Day, Total Trades, Money Moved
 
-0:00,113407,149492
-1:00,114080,155174
-2:00,111024,144947
-3:00,107219,148641
-4:00,94576,136598
-5:00,86024,130345
-6:00,87544,126206
-7:00,89626,139473
-8:00,95975,198997
-9:00,79616,120440
-10:00,71941,83904
-11:00,79096,75134
-12:00,83362,75840
-13:00,91923,93038
-14:00,98944,101378
-15:00,109247,103672
-16:00,116131,127396
-17:00,116358,139372
-18:00,120874,133339
-19:00,127526,142989
-20:00,128716,147497
-21:00,129821,147091
-22:00,123944,157583
-23:00,116729,134594
+| Hour | Total Trades | Money Moved |
+|------|--------------|-------------|
+| 00   | 113436       | 149892.53   |
+| 01   | 114036       | 155002.44   |
+| 02   | 111010       | 144957.68   |
+| 03   | 107194       | 148705.67   |
+| 04   | 94599        | 136951.67   |
+| 05   | 86013        | 130416.53   |
+| 06   | 87508        | 125992.13   |
+| 07   | 89604        | 139170.92   |
+| 08   | 95962        | 199056.45   |
+| 09   | 79598        | 120374.23   |
+| 10   | 71939        | 83971.04    |
+| 11   | 79068        | 75039.10    |
+| 12   | 83346        | 75831.76    |
+| 13   | 91905        | 93038.80    |
+| 14   | 98919        | 101369.13   |
+| 15   | 109234       | 103668.68   |
+| 16   | 116086       | 127366.42   |
+| 17   | 116305       | 138870.67   |
+| 18   | 120828       | 133231.79   |
+| 19   | 127516       | 143125.11   |
+| 20   | 128689       | 147428.60   |
+| 21   | 129783       | 146909.10   |
+| 22   | 123905       | 157420.83   |
+| 23   | 116696       | 134427.53   |
+
+SELECT 
+    strftime('%H', timestamp, 'unixepoch') AS hour_of_day,
+    COUNT(*) AS total_trades,
+	SUM(PRICE)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY hour_of_day
+ORDER BY hour_of_day;
 
 ### Day of the Week
 Day of the Week,Total Trades, Money Moved
 
-Sunday,397396,510743
-Monday,352783,461765
-Tuesday,352178,456411
-Wednesday,349203,431620
-Thursday,329980,411713
-Friday,341810,396796
-Saturday,370353,444093
+| Day       | Total Trades | Money Moved           |
+|-----------|--------------|-----------------------|
+| Sunday    | 397266       | 509982.40             |
+| Monday    | 352726       | 461864.41             |
+| Tuesday   | 352134       | 456240.22             |
+| Wednesday | 349130       | 431593.36             |
+| Thursday  | 329902       | 411712.97             |
+| Friday    | 341741       | 396818.95             |
+| Saturday  | 370280       | 444006.50             |
 
-### Day of the Week
-Day of the Week,Total Trades, Money Moved
 
-Sunday,397396,510743
-Monday,352783,461765
-Tuesday,352178,456411
-Wednesday,349203,431620
-Thursday,329980,411713
-Friday,341810,396796
-Saturday,370353,444093
+SELECT 
+    strftime('%w', timestamp, 'unixepoch') AS day_of_week,
+    COUNT(*) AS total_trades,
+	SUM(PRICE)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY day_of_week
+ORDER BY day_of_week;
+
+SELECT 
+    strftime('%w', timestamp, 'unixepoch') AS day_of_week,
+	strftime('%H', timestamp, 'unixepoch') AS hour_of_day,
+    COUNT(*) AS total_trades,
+	SUM(PRICE)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY day_of_week, hour_of_day
+ORDER BY day_of_week, hour_of_day;
 
 ### Month of the Year
-Month,Total Trades, Money Moved
 
-Jan,271404,292793
-Feb,193665,193130
-March,222917,259636
-April,185720,253607
-May,219461,232034
-June,185709,172847
-July,209809,291857
-August,231064,381505
-September,188742,244038
-October,185706,261475
-November,196140,217492
-December,203366,333728
+| Month    | Total Trades | Money Moved          |
+|----------|--------------|----------------------|
+| 2023-01  | 271404       | 292793.48            |
+| 2023-02  | 193665       | 193129.92            |
+| 2023-03  | 222917       | 259635.81            |
+| 2023-04  | 185720       | 253606.95            |
+| 2023-05  | 219461       | 232034.37            |
+| 2023-06  | 185709       | 172846.79            |
+| 2023-07  | 209809       | 291856.94            |
+| 2023-08  | 231064       | 381505.07            |
+| 2023-09  | 188742       | 224038.00            |
+| 2023-10  | 185537       | 260495.24            |
+| 2023-11  | 195958       | 217322.43            |
+| 2023-12  | 203193       | 332953.81            |
 
-Traders Per Month
 
-Most Trades
+SELECT 
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month,
+    COUNT(*) AS total_trades,
+	SUM(price)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY month
+ORDER BY month;
 
-Jan,Mikeswill,2328
-Feb,Noahs Second Country,2293
-March,Noahs Second Country,1965
-April,Noahs Second Country,2053
-May,War Dogs IV,1142
-June,War Dogs IV,7316
-July,War Dogs IV,4851
-August,War Dogs IV,4219
-September,Fauzjhia,4399
-October,War Dogs IV,3904
-November,War Dogs IV,3738
-December,War Dogs IV,4043
+### Traders Per Month
 
-Most Money:
+> Most Trades ( > 0 )
 
-Jan,Noahs Second Country,19634
-Feb,Giraffeton,12164
-March,Noahs Second Country,6517
-April,Noahs Second Country,21983
-May,Seanat,11531
-June,Koem Kab,870
-July,Koem Kab,38629
-August,Koem Kab,19210
-September,Ianaterp,10000
-October,Noahs Second Country,35290
-November,Noahs Second Country,11490
-December,Panagouge,16912
+| Year-Month | Trader                | Total Trades |
+|------------|-----------------------|--------------|
+| 2023-01    | The North Pacific S3  | 10466        |
+| 2023-02    | Dune Cat               | 11280        |
+| 2023-03    | Dune Cat               | 19287        |
+| 2023-04    | Apexiala               | 2713         |
+| 2023-05    | War Dogs IV            | 9546         |
+| 2023-06    | War Dogs IV            | 4507         |
+| 2023-07    | Koem Kab               | 3847         |
+| 2023-08    | Giovanniland           | 3003         |
+| 2023-09    | War Dogs IV            | 2697         |
+| 2023-10    | Noah's Second Country  | 3528         |
+| 2023-11    | New Zander             | 6890         |
+| 2023-12    | War Dogs IV            | 3003         |
 
-Unique Cards Traded Per Month
+WITH MonthlyStats AS (
+  SELECT 
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month,
+    buyer AS trader,
+    COUNT(*) AS total_trades
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+  GROUP BY month, trader
 
-Jan,100018
-Feb,80047
-March,87552
-April,66876
-May,82923
-June,74682
-July,73707
-August,72355
-September,68646
-October,63972
-November,68783
-Decemeber,69496
+  UNION ALL
+
+  SELECT 
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month,
+    seller AS trader,
+    COUNT(*) AS total_trades
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+  AND PRICE > 0
+  GROUP BY month, trader
+)
+
+SELECT 
+  month,
+  trader,
+  total_trades
+FROM (
+  SELECT 
+    month,
+    trader,
+    total_trades,
+    ROW_NUMBER() OVER (PARTITION BY month ORDER BY total_trades DESC) AS trades_rank
+  FROM MonthlyStats
+) RankedStats
+WHERE trades_rank = 1
+ORDER BY month;
+
+
+> Most Money:
+
+| Year-Month | Trader                | Money Moved |
+|------------|-----------------------|-------------|
+| 2023-01    | Noah's Second Country | 19633.92    |
+| 2023-02    | Giraffeton            | 12164.69    |
+| 2023-03    | Noah's Second Country | 19653.21    |
+| 2023-04    | Noah's Second Country | 21982.61    |
+| 2023-05    | Seanat                | 11530.6     |
+| 2023-06    | Koem Kab              | 8970.3      |
+| 2023-07    | Koem Kab              | 38629.32    |
+| 2023-08    | Koem Kab              | 19210.3     |
+| 2023-09    | Koem Kab              | 10105.74    |
+| 2023-10    | Noah's Second Country | 35270.02    |
+| 2023-11    | Aerilia               | 12785.81    |
+| 2023-12    | Varanius              | 17699.61    |
+
+
+> Unique Cards Traded Per Month
+
+| Month   | Unique Cards Traded |
+|---------|----------------------|
+| 2023-01 | 100018               |
+| 2023-02 | 80047                |
+| 2023-03 | 87552                |
+| 2023-04 | 66876                |
+| 2023-05 | 82923                |
+| 2023-06 | 74682                |
+| 2023-07 | 73707                |
+| 2023-08 | 72355                |
+| 2023-09 | 68646                |
+| 2023-10 | 63947                |
+| 2023-11 | 68737                |
+| 2023-12 | 69452                |
+
+SELECT strftime('%Y-%m', timestamp, 'unixepoch') AS month_year, 
+       COUNT(DISTINCT card_id) AS unique_cards_traded
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY month_year
+ORDER BY month_year;
+
+> Top 3 Legendaries money move per month
+
+### January 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S2 S_diego              | 7827.41           |
+| S3 Racoda               | 3149.99           |
+| S3 Crazy girl           | 2061.03           |
+
+### February 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S2 S_diego              | 2608.02           |
+| S3 Giovanniland         | 1864.48           |
+| S3 Sedgistan            | 1707.78           |
+
+### March 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Sacara               | 5349.96           |
+| S3 Lamoni               | 2479.53           |
+| S3 Chan Island          | 2083.33           |
+
+### April 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Morover              | 4444.67           |
+| S3 Sedgistan            | 2529.5            |
+| S3 Noahs Second Country | 1800.99           |
+
+### May 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Testlandia           | 2521.65           |
+| S3 Crazy girl           | 2280.0            |
+| S3 Giovanniland         | 2157.0            |
+
+### June 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Sedgistan            | 1475.99           |
+| S3 Wrapper              | 1464.99           |
+| S3 Verdant Haven        | 1174.93           |
+
+### July 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Racoda               | 1602.47           |
+| S3 Sedgistan            | 1552.65           |
+| S3 Chan Island          | 1500.0            |
+
+### August 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Annihilators of Chan Island | 15000.5    |
+| S3 Chan Island          | 3500.0            |
+| S3 Sylh Alanor          | 3418.5            |
+
+### September 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Annihilators of Chan Island | 10000.0    |
+| S3 The Stalker          | 3850.12           |
+| S3 Daarwyrth            | 2060.5            |
+
+### October 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Annihilators of Chan Island | 9999.99    |
+| S3 Safj                 | 3607.5            |
+| S3 Alice Gardens        | 2296.37           |
+
+### November 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Annihilators of Chan Island | 5000.0     |
+| S3 Morover              | 4500.0            |
+| S3 Eaischpnaeieacgkque Bhcieaghpodsttditf | 3263.0 |
+
+### December 2023
+
+| Card Name               | Total Money Moved |
+|-------------------------|-------------------|
+| S3 Sacara               | 13184.04          |
+| S3 The Stalker          | 8993.53           |
+| S3 Morover              | 2955.02           |
+
+WITH MonthlyTopCards AS (
+  SELECT 
+    strftime('%Y-%m', timestamp, 'unixepoch') AS month_year,
+    card_name, 
+    season,
+    SUM(price) AS total_money_moved,
+    ROW_NUMBER() OVER (PARTITION BY strftime('%Y-%m', timestamp, 'unixepoch') ORDER BY SUM(price) DESC) AS rn
+  FROM trades
+  WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+    AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+	AND CATEGORY = 'l'
+  GROUP BY month_year, card_name, season
+)
+
+SELECT month_year, card_name, season, total_money_moved
+FROM MonthlyTopCards
+WHERE rn <= 3
+ORDER BY month_year, total_money_moved DESC;
