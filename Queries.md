@@ -1358,3 +1358,21 @@ LIMIT 10;
 ```
 
 </details>
+
+<details>
+  <summary>Hour of the Day Heatmap</summary>
+
+  ```sql
+  SELECT
+    strftime('%w', timestamp, 'unixepoch') AS day_of_week,
+	strftime('%H', timestamp, 'unixepoch') AS hour_of_day,
+    COUNT(*) AS total_trades,
+	SUM(PRICE)
+FROM trades
+WHERE timestamp >= strftime('%s', '2023-01-01 00:00:00')
+  AND timestamp < strftime('%s', '2024-01-01 00:00:00')
+GROUP BY day_of_week, hour_of_day
+ORDER BY day_of_week, hour_of_day;
+  ```
+
+</details>
