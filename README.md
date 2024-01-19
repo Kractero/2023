@@ -2,7 +2,7 @@
 
 In an effort to analyze market activity and make use of some of the data I've gathered, this report will delve into the activity of the card market in 2023, as well as make some comparisons to that of 2022.
 
-All of these statistics will be looked at with gifting (trades where the price = 0) and without gifting, as well have their [relevant sql query provided](Queries.md).
+All of these statistics will be looked at with gifting (trades where the price = 0) and without gifting, as well have their [relevant sql query provided](https://github.com/Kractero/2023/blob/master/Queries.md).
 
 Go to section
 - [A Brief Comparison with 2023 and 2022](#a-brief-comparison-with-2023-and-2022)
@@ -1208,8 +1208,8 @@ Note: UTC
 
 | Card Name               | Total Money Moved |
 |-------------------------|-------------------|
-| S3 Sacara               | 5349.96           |
-| S3 Lamoni               | 2479.53           |
+| S2 Sacara               | 5349.96           |
+| S2 Lamoni               | 2479.53           |
 | S3 Chan Island          | 2083.33           |
 
 > April 2023
@@ -1274,12 +1274,12 @@ Note: UTC
 |-------------------------|-------------------|
 | S3 Annihilators of Chan Island | 5000.0     |
 | S3 Morover              | 4500.0            |
-| S3 Eaischpnaeieacgkque Bhcieaghpodsttditf | 3263.0 |
+| S1 Eaischpnaeieacgkque Bhcieaghpodsttditf | 3263.0 |
 
 > December 2023
 
 | Card Name               | Total Money Moved |
 |-------------------------|-------------------|
-| S3 Sacara               | 13184.04          |
+| S2 Sacara               | 13184.04          |
 | S3 The Stalker          | 8993.53           |
 | S3 Morover              | 2955.02           |
