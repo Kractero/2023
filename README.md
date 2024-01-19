@@ -265,18 +265,18 @@ The below chart details per season, a breakdown of each card rarity's movement o
 
 ### Top Rare Trades of the Year
 
-| Rank | Seller            | Buyer             | Price  | Card                         | Date       |
-|------|-------------------|-------------------|--------|------------------------------|------------|
-| 1    | 9003              | 9006              | 1000.0 | S2 Shin Bet                  | 2023-05-02 |
-| 2    | Upper Tuchoim     | TheLandOfFunFunFun | 350.0  | S3 Upper Tuchoim             | 2023-09-13 |
-| 3    | Upper Tuchoim     | Vylixan Dora       | 333.33 | S3 Upper Tuchoim             | 2023-12-29 |
-| 4    | Upper Tuchoim     | Calyxion           | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
-| 5    | Upper Tuchoim     | Tropical Isles     | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
-| 6    | Upper Tuchoim     | Volstrostia        | 333.33 | S3 Upper Tuchoim             | 2023-12-09 |
-| 7    | Upper Tuchoim     | War Dogs IV        | 333.33 | S3 Upper Tuchoim             | 2023-12-06 |
-| 8    | Bigboy245         | Upper Tuchoim      | 319.0  | S3 Upper Tuchoim             | 2023-09-16 |
-| 9    | Bigboy170         | Bigboy245          | 314.0  | S3 Upper Tuchoim             | 2023-09-16 |
-| 10   | Bigboy184         | Bigboy170          | 302.0  | S3 Upper Tuchoim             | 2023-09-15 |
+| Rank | Seller             | Buyer             | Price  | Card                         | Date       |
+|------|--------------------|-------------------|--------|------------------------------|------------|
+| 1    | 9006               | 9003              | 1000.0 | S2 Shin Bet                  | 2023-05-02 |
+| 2    | TheLandOfFunFunFun | Upper Tuchoim     | 350.0  | S3 Upper Tuchoim             | 2023-09-13 |
+| 3    | Vylixan Dora       | Upper Tuchoim     | 333.33 | S3 Upper Tuchoim             | 2023-12-29 |
+| 4    | Calyxion            | Upper Tuchoim     | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
+| 5    | Tropical Isles      | Upper Tuchoim     | 333.33 | S3 Upper Tuchoim             | 2023-12-23 |
+| 6    | Volstrostia         | Upper Tuchoim     | 333.33 | S3 Upper Tuchoim             | 2023-12-09 |
+| 7    | War Dogs IV         | Upper Tuchoim     | 333.33 | S3 Upper Tuchoim             | 2023-12-06 |
+| 8    | Upper Tuchoim       | Bigboy245         | 319.0  | S3 Upper Tuchoim             | 2023-09-16 |
+| 9    | Bigboy245           | Bigboy170         | 314.0  | S3 Upper Tuchoim             | 2023-09-16 |
+| 10   | Bigboy170           | Bigboy184         | 302.0  | S3 Upper Tuchoim             | 2023-09-15 |
 
 ###  Top Ultra Rare Trades of the Year
 
